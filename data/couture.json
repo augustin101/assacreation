@@ -2,64 +2,71 @@
   {
     "id": "bob",
     "name": "Bob",
-    "price": 15,
+    "price": 15.00,
     "description": "Bob en tissu africain wax, doublure intérieure coton.",
-    "image": "images/couture/bob.jpg"
+    "image": "images/couture/bob.avif"
   },
   {
-    "id": "tote-bag",
-    "name": "Tote bag",
-    "price": 12,
-    "description": "Grand tote bag résistant, anses solides renforcées.",
-    "image": "images/couture/tote-bag.jpg"
+    "id": "calecon-parachute-unisexe",
+    "name": "Caleçon parachute unisexe",
+    "price":17.000,
+    "description": "Caleçon unisexe en tissu parachute léger et confortable.",
+    "image": "images/couture/calecon-parachute-unisexe.avif"
   },
   {
-    "id": "chouchou",
-    "name": "Chouchou",
-    "price": 5,
+    "id": "chouchou-en-tissus",
+    "name": "Chouchou en tissus",
+    "price": 5.00,
     "description": "Chouchou élastiqué en tissu wax ou coton imprimé.",
-    "image": "images/couture/chouchou.jpg"
+    "image": "images/couture/chouchou-en-tissus.avif"
   },
   {
-    "id": "calecon",
-    "name": "Caleçon",
-    "price": 20,
-    "description": "Caleçon confortable en tissu doux, élastique à la taille.",
-    "image": "images/couture/calecon.jpg"
+    "id": "cotons-reutilisable",
+    "name": "Cotons réutilisables (3 pièces)",
+    "price": 5.00,
+    "description": "Lot de cotons démaquillants lavables, éco-responsables.",
+    "image": "images/couture/cotons-reutilisable.avif"
   },
   {
-    "id": "cotons-reutilisables",
-    "name": "Cotons réutilisables",
-    "price": 8,
-    "description": "Lot de 7 cotons démaquillants lavables, éco-responsables.",
-    "image": "images/couture/cotons-reutilisables.jpg"
-  },
-  {
-    "id": "tablier",
-    "name": "Tablier",
-    "price": 25,
-    "description": "Tablier cuisine à bavette, tissu résistant.",
-    "image": "images/couture/tablier.jpg"
-  },
-  {
-    "id": "etui-couverts",
+    "id": "etui-a-couverts",
     "name": "Étui à couverts",
-    "price": 10,
-    "description": "Pochette zippée pour couverts de voyage, tissu enduit.",
-    "image": "images/couture/etui-couverts.jpg"
+    "price": 8.00,
+    "description": "Pochette pour couverts de voyage, idéale zéro déchet.",
+    "image": "images/couture/etui-a-couverts.avif"
+  },
+  {
+    "id": "pon-chaud",
+    "name": "Pon'chaud",
+    "price": 50.00,
+    "description": "Manteau poncho chaud en tissu avec capuche, parfait pour les journées fraîches.",
+    "image": "images/couture/pon-chaud.avif"
   },
   {
     "id": "sac-a-dos",
     "name": "Sac à dos",
-    "price": 45,
-    "description": "Sac à dos enfant ou adulte, bretelles réglables.",
-    "image": "images/couture/sac-a-dos.jpg"
+    "price": 60.00,
+    "description": "Sac à dos en tissu wax, bretelles réglables.",
+    "image": "images/couture/sac-a-dos.avif"
   },
   {
-    "id": "ponchaud",
-    "name": "Pon'chaud",
-    "price": 18,
-    "description": "Chauffe-mains biface en tissu molletonné, réversible.",
-    "image": "images/couture/ponchaud.jpg"
+    "id": "tablier-de-cuisine",
+    "name": "Tablier de cuisine",
+    "price": 25.00,
+    "description": "Tablier cuisine à bavette en tissu résistant.",
+    "image": "images/couture/tablier_de_cuisine.avif"
+  },
+  {
+    "id": "tote-bag-a-tarte",
+    "name": "Tote bag à tarte",
+    "price": 20.00,
+    "description": "Tote bag conçu pour transporter tartes et plats en toute sécurité.",
+    "image": "images/couture/tote-bag-a-tarte.avif"
+  },
+  {
+    "id": "tote-bag",
+    "name": "Tote bag",
+    "price": 10.00,
+    "description": "Grand tote bag résistant en tissu wax, anses solides renforcées.",
+    "image": "images/couture/tote-bag.avif"
   }
 ]

@@ -8,19 +8,41 @@ async function fetchJSON(url) {
 
 // ── Cartes produits ──────────────────────────────────────
 
+function priceHtml(price) {
+  if (!price || price <= 0) return '';
+  return `<span class="price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 0 })}&nbsp;€</span>`;
+}
+
+function makeCardClickable(article, image, alt) {
+  article.classList.add('product-card--clickable');
+  article.setAttribute('role', 'button');
+  article.setAttribute('tabindex', '0');
+  article.setAttribute('aria-label', `Agrandir : ${alt}`);
+  article.addEventListener('click', () => openLightbox(image, alt));
+  article.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(image, alt); }
+  });
+}
+
 function createProductCard({ name, price, description, image }) {
   const article = document.createElement('article');
   article.className = 'product-card';
   article.innerHTML = `
     <div class="product-img-wrap">
       <img src="${image}" alt="${name}" loading="lazy">
+      <div class="product-img-overlay" aria-hidden="true"></div>
     </div>
     <div class="product-info">
-      <h3>${name}</h3>
-      <p>${description}</p>
-      <span class="price">à partir de ${price}&nbsp;€</span>
+      <div class="product-info-body">
+        <h3>${name}</h3>
+        <p>${description}</p>
+      </div>
+      <div class="product-info-footer">
+        ${priceHtml(price)}
+      </div>
     </div>
   `;
+  makeCardClickable(article, image, name);
   return article;
 }
 
@@ -31,13 +53,19 @@ function createBijouxCard({ name, price, base, image }) {
   article.innerHTML = `
     <div class="product-img-wrap">
       <img src="${image}" alt="${name}" loading="lazy">
+      <div class="product-img-overlay" aria-hidden="true"></div>
     </div>
     <div class="product-info">
-      <h3>${name}</h3>
-      <span class="badge badge-metal">${baseLabel}</span>
-      <span class="price">à partir de ${price}&nbsp;€</span>
+      <div class="product-info-body">
+        <h3>${name}</h3>
+      </div>
+      <div class="product-info-footer">
+        <span class="badge badge-metal">${baseLabel}</span>
+        ${priceHtml(price)}
+      </div>
     </div>
   `;
+  makeCardClickable(article, image, name);
   return article;
 }
 

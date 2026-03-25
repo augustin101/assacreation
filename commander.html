@@ -46,7 +46,7 @@
 
           <!-- Formulaire principal -->
           <form id="order-form"
-                action="https://formspree.io/f/XXXXXX"
+                action="https://formspree.io/f/xeepqadr"
                 method="POST"
                 novalidate>
 
@@ -88,40 +88,37 @@
             <!-- ─ Section Couture ──────────────────────── -->
             <div id="section-couture" hidden>
               <fieldset class="form-section">
-                <legend>Votre création</legend>
-
-                <div class="form-group">
-                  <label for="article">Article souhaité *</label>
-                  <select id="article" name="article" data-required>
-                    <option value="">— Choisir un article —</option>
-                  </select>
+                <legend>Vos articles</legend>
+                <p class="form-hint">Cochez les articles souhaités et ajustez les quantités.</p>
+                <div id="articles-selector" class="articles-list">
+                  <!-- Rempli par order-form.js -->
                 </div>
+              </fieldset>
 
-                <div class="form-group">
-                  <p class="form-group" style="font-size:var(--text-sm);font-weight:500;margin-bottom:var(--space-2)">
-                    Tissu(s) souhaité(s)
-                  </p>
-                  <p class="form-hint">Cliquez sur un ou plusieurs tissus pour les sélectionner. Les tissus épuisés ne sont pas sélectionnables.</p>
+              <fieldset class="form-section">
+                <legend>Tissu principal</legend>
+                <p class="form-hint">Un seul tissu par article. Si vos articles nécessitent des tissus différents, précisez-le dans les remarques.</p>
+                <div class="tissus-scroll-wrap">
                   <div id="tissus-selector" class="tissus-selector-grid"></div>
                 </div>
+              </fieldset>
 
-                <div class="form-group">
-                  <p style="font-size:var(--text-sm);font-weight:500;margin-bottom:var(--space-2)">
-                    Tissu de doublure <em style="font-weight:400;color:var(--color-text-muted)">(optionnel)</em>
-                  </p>
-                  <p class="form-hint">Si vous souhaitez une doublure dans un tissu différent.</p>
+              <fieldset class="form-section">
+                <legend>Tissu de doublure <span class="legend-optional">(optionnel)</span></legend>
+                <p class="form-hint">Si vous souhaitez une doublure dans un tissu différent.</p>
+                <div class="tissus-scroll-wrap">
                   <div id="doublure-selector" class="tissus-selector-grid"></div>
                 </div>
+              </fieldset>
 
-                <div class="form-group">
-                  <label for="precisions-couture">Précisions, mesures, idées</label>
-                  <textarea
-                    id="precisions-couture"
-                    name="precisions_couture"
-                    rows="4"
-                    placeholder="Taille, tour de tête, longueur souhaitée, idées de personnalisation…"
-                  ></textarea>
-                </div>
+              <fieldset class="form-section">
+                <legend>Précisions</legend>
+                <textarea
+                  id="precisions-couture"
+                  name="precisions_couture"
+                  rows="4"
+                  placeholder="Taille, tour de tête, longueur souhaitée, tissu différent par article, idées de personnalisation…"
+                ></textarea>
               </fieldset>
             </div>
 
@@ -241,6 +238,15 @@
                 </label>
               </div>
             </fieldset>
+
+            <!-- ─ Récapitulatif prix ───────────────────── -->
+            <div id="price-summary" class="price-summary" hidden>
+              <div class="price-summary-row">
+                <span>Estimation :</span>
+                <span id="price-total" class="price-total-amount"></span>
+              </div>
+              <p class="form-hint" style="margin-top:var(--space-2)">Prix indicatifs — le tarif final sera confirmé par Assa.</p>
+            </div>
 
             <div class="form-submit">
               <button type="submit" class="btn btn-primary btn-lg">
