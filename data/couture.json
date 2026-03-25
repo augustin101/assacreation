@@ -1,0 +1,65 @@
+[
+  {
+    "id": "bob",
+    "name": "Bob",
+    "price": 15,
+    "description": "Bob en tissu africain wax, doublure intérieure coton.",
+    "image": "images/couture/bob.jpg"
+  },
+  {
+    "id": "tote-bag",
+    "name": "Tote bag",
+    "price": 12,
+    "description": "Grand tote bag résistant, anses solides renforcées.",
+    "image": "images/couture/tote-bag.jpg"
+  },
+  {
+    "id": "chouchou",
+    "name": "Chouchou",
+    "price": 5,
+    "description": "Chouchou élastiqué en tissu wax ou coton imprimé.",
+    "image": "images/couture/chouchou.jpg"
+  },
+  {
+    "id": "calecon",
+    "name": "Caleçon",
+    "price": 20,
+    "description": "Caleçon confortable en tissu doux, élastique à la taille.",
+    "image": "images/couture/calecon.jpg"
+  },
+  {
+    "id": "cotons-reutilisables",
+    "name": "Cotons réutilisables",
+    "price": 8,
+    "description": "Lot de 7 cotons démaquillants lavables, éco-responsables.",
+    "image": "images/couture/cotons-reutilisables.jpg"
+  },
+  {
+    "id": "tablier",
+    "name": "Tablier",
+    "price": 25,
+    "description": "Tablier cuisine à bavette, tissu résistant.",
+    "image": "images/couture/tablier.jpg"
+  },
+  {
+    "id": "etui-couverts",
+    "name": "Étui à couverts",
+    "price": 10,
+    "description": "Pochette zippée pour couverts de voyage, tissu enduit.",
+    "image": "images/couture/etui-couverts.jpg"
+  },
+  {
+    "id": "sac-a-dos",
+    "name": "Sac à dos",
+    "price": 45,
+    "description": "Sac à dos enfant ou adulte, bretelles réglables.",
+    "image": "images/couture/sac-a-dos.jpg"
+  },
+  {
+    "id": "ponchaud",
+    "name": "Pon'chaud",
+    "price": 18,
+    "description": "Chauffe-mains biface en tissu molletonné, réversible.",
+    "image": "images/couture/ponchaud.jpg"
+  }
+]

@@ -1,0 +1,37 @@
+[
+  {
+    "id": "boucles-perles-tissees",
+    "name": "Boucles d'oreille en perles tissées",
+    "price": 15,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucles-perles-tissees.jpg"
+  },
+  {
+    "id": "boucles-longues",
+    "name": "Boucles d'oreille longues",
+    "price": 18,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucles-longues.jpg"
+  },
+  {
+    "id": "collier-ras-de-cou",
+    "name": "Collier ras-de-cou",
+    "price": 22,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/collier-ras-de-cou.jpg"
+  },
+  {
+    "id": "bracelet-hanche",
+    "name": "Bracelet de hanche",
+    "price": 20,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/bracelet-hanche.jpg"
+  },
+  {
+    "id": "bracelet-poignet",
+    "name": "Bracelet de poignet",
+    "price": 12,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/bracelet-poignet.jpg"
+  }
+]

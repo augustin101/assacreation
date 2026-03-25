@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Couture — Assa Créations</title>
+  <meta name="description" content="Bobs, tote bags, chouchous, tabliers et autres créations textiles en tissu africain wax, confectionnées à la main par Assa.">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ── En-tête ───────────────────────────────────────── -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Assa Créations</a>
+      <button class="nav-toggle" aria-label="Ouvrir le menu"
+              onclick="document.getElementById('site-header').classList.toggle('nav-open')">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="couture.html">Couture</a>
+        <a href="bijoux.html">Bijoux</a>
+        <a href="commander.html" class="nav-cta">Commander</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Hero page ─────────────────────────────────────── -->
+    <section class="page-hero">
+      <div class="container">
+        <h1>Couture</h1>
+        <p>Créations textiles faites main en tissus africains wax et cotons imprimés.</p>
+      </div>
+    </section>
+
+    <!-- ── Créations ──────────────────────────────────────── -->
+    <section>
+      <div class="container">
+        <div class="section-header">
+          <h2>Les créations</h2>
+          <p>Toutes les pièces sont fabriquées sur commande et personnalisables selon vos tissus.</p>
+        </div>
+        <div class="product-grid" id="couture-grid" aria-busy="true" aria-label="Grille des créations couture">
+          <!-- Rempli dynamiquement par catalogue.js -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Tissus ─────────────────────────────────────────── -->
+    <section>
+      <div class="container">
+        <div class="tissus-section">
+          <div class="section-header">
+            <h2>Les tissus disponibles</h2>
+            <p>Cliquez sur un tissu pour l'agrandir. Les disponibilités sont indiquées sous chaque tissu.</p>
+          </div>
+          <div class="tissus-grid" id="tissus-grid" aria-label="Galerie des tissus disponibles">
+            <!-- Rempli dynamiquement par catalogue.js -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── CTA ───────────────────────────────────────────── -->
+    <section style="text-align:center; padding-block: var(--space-8) var(--space-16)">
+      <div class="container">
+        <h2 style="margin-bottom:var(--space-4)">Vous avez trouvé votre bonheur ?</h2>
+        <p style="color:var(--color-text-muted);margin-bottom:var(--space-6)">
+          Passez votre commande en ligne et choisissez vos tissus préférés.
+        </p>
+        <a href="commander.html" class="btn btn-primary btn-lg">Passer une commande</a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Pied de page ───────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">Assa Créations</a>
+          <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Navigation pied de page">
+          <h3>Pages</h3>
+          <a href="couture.html">Couture</a>
+          <a href="bijoux.html">Bijoux</a>
+          <a href="commander.html">Commander</a>
+          <a href="a-propos.html">À propos</a>
+        </nav>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <a href="mailto:contact@assacreation.com">contact@assacreation.com</a>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Assa Créations</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/catalogue.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

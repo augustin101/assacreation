@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Assa Créations — Créations textiles &amp; bijoux faits main</title>
+  <meta name="description" content="Découvrez les créations textiles et bijoux en perles faits main par Assa : bobs, tote bags, colliers, bracelets et bien plus. Commande personnalisée sur mesure.">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ── En-tête ───────────────────────────────────────── -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Assa Créations</a>
+      <button class="nav-toggle" aria-label="Ouvrir le menu"
+              onclick="document.getElementById('site-header').classList.toggle('nav-open')">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="couture.html">Couture</a>
+        <a href="bijoux.html">Bijoux</a>
+        <a href="commander.html" class="nav-cta">Commander</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Héros ─────────────────────────────────────────── -->
+    <section class="hero">
+      <div class="container">
+        <div class="hero-text">
+          <span class="hero-eyebrow">Créations faites main</span>
+          <h1>Textiles &amp; bijoux<br><em>uniques</em></h1>
+          <p>Chaque pièce est confectionnée avec soin par Assa, à partir de tissus africains et de perles soigneusement sélectionnées.</p>
+          <div class="hero-ctas">
+            <a href="couture.html" class="btn btn-primary">Voir la couture</a>
+            <a href="bijoux.html" class="btn btn-secondary">Voir les bijoux</a>
+          </div>
+        </div>
+        <div class="hero-img">
+          <img src="images/hero.jpg" alt="Création Assa Créations" loading="eager">
+        </div>
+      </div>
+    </section>
+
+    <!-- ── Catégories ─────────────────────────────────────── -->
+    <section class="categories">
+      <div class="container">
+        <a href="couture.html" class="category-card">
+          <div class="category-card-img">
+            <img src="images/category-couture.jpg" alt="Couture" loading="lazy">
+          </div>
+          <div class="category-card-body">
+            <h2>Couture</h2>
+            <p>Bobs, tote bags, tabliers, sacs à dos &amp; bien d'autres créations en tissu wax</p>
+          </div>
+        </a>
+        <a href="bijoux.html" class="category-card">
+          <div class="category-card-img">
+            <img src="images/category-bijoux.jpg" alt="Bijoux" loading="lazy">
+          </div>
+          <div class="category-card-body">
+            <h2>Bijoux</h2>
+            <p>Boucles d'oreille, colliers et bracelets en perles tissées à la main</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- ── Comment ça marche ──────────────────────────────── -->
+    <section class="how-it-works">
+      <div class="container">
+        <div class="section-header">
+          <h2>Comment ça marche ?</h2>
+          <p>Commander une pièce personnalisée est simple et rapide.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <h3>Choisissez</h3>
+            <p>Parcourez les créations et repérez l'article qui vous plaît.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <h3>Personnalisez</h3>
+            <p>Sélectionnez vos tissus, couleurs, mesures et options dans le formulaire de commande.</p>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <h3>Recevez votre pièce</h3>
+            <p>Assa vous recontacte sous 48h pour confirmer les détails et vous envoyer votre création.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Pied de page ───────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">Assa Créations</a>
+          <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Navigation pied de page">
+          <h3>Pages</h3>
+          <a href="couture.html">Couture</a>
+          <a href="bijoux.html">Bijoux</a>
+          <a href="commander.html">Commander</a>
+          <a href="a-propos.html">À propos</a>
+        </nav>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <a href="mailto:contact@assacreation.com">contact@assacreation.com</a>
+          <!-- <a href="https://instagram.com/assacreation" target="_blank" rel="noopener">Instagram</a> -->
+        </div>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Assa Créations</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+    const page = location.pathname.split('/').pop() || 'index.html';
+    document.querySelector(`.site-nav a[href="${page}"]`)?.classList.add('active');
+  </script>
+
+</body>
+</html>

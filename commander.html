@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commander — Assa Créations</title>
+  <meta name="description" content="Passez votre commande personnalisée : choisissez vos tissus, vos couleurs de perles, et envoyez votre demande directement à Assa.">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+
+  <!-- ── En-tête ───────────────────────────────────────── -->
+  <header class="site-header" id="site-header">
+    <div class="container">
+      <a href="index.html" class="logo">Assa Créations</a>
+      <button class="nav-toggle" aria-label="Ouvrir le menu"
+              onclick="document.getElementById('site-header').classList.toggle('nav-open')">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="site-nav" aria-label="Navigation principale">
+        <a href="index.html">Accueil</a>
+        <a href="couture.html">Couture</a>
+        <a href="bijoux.html">Bijoux</a>
+        <a href="commander.html" class="nav-cta">Commander</a>
+        <a href="a-propos.html">À propos</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Hero page ─────────────────────────────────────── -->
+    <section class="page-hero">
+      <div class="container">
+        <h1>Passer une commande</h1>
+        <p>Remplissez le formulaire ci-dessous. Assa vous répondra sous 48h pour confirmer les détails et le tarif.</p>
+      </div>
+    </section>
+
+    <!-- ── Formulaire ─────────────────────────────────────── -->
+    <section>
+      <div class="container">
+        <div class="order-page">
+
+          <!-- Formulaire principal -->
+          <form id="order-form"
+                action="https://formspree.io/f/XXXXXX"
+                method="POST"
+                novalidate>
+
+            <!-- ─ Étape 1 : Catégorie ───────────────────── -->
+            <fieldset class="form-section">
+              <legend>Que souhaitez-vous commander ?</legend>
+              <div class="radio-cards">
+                <label class="radio-card">
+                  <input type="radio" name="categorie" value="couture" required>
+                  <div class="radio-card-inner">
+                    <span class="radio-card-icon" aria-hidden="true">
+                      <!-- Icône tissu (SVG inline) -->
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
+                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                        <line x1="3" y1="6" x2="21" y2="6"/>
+                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                      </svg>
+                    </span>
+                    <span class="radio-card-label">Couture</span>
+                    <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Vêtements &amp; accessoires</span>
+                  </div>
+                </label>
+                <label class="radio-card">
+                  <input type="radio" name="categorie" value="bijoux" required>
+                  <div class="radio-card-inner">
+                    <span class="radio-card-icon" aria-hidden="true">
+                      <!-- Icône bijou (SVG inline) -->
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                      </svg>
+                    </span>
+                    <span class="radio-card-label">Bijoux</span>
+                    <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Perles tissées à la main</span>
+                  </div>
+                </label>
+              </div>
+            </fieldset>
+
+            <!-- ─ Section Couture ──────────────────────── -->
+            <div id="section-couture" hidden>
+              <fieldset class="form-section">
+                <legend>Votre création</legend>
+
+                <div class="form-group">
+                  <label for="article">Article souhaité *</label>
+                  <select id="article" name="article" data-required>
+                    <option value="">— Choisir un article —</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <p class="form-group" style="font-size:var(--text-sm);font-weight:500;margin-bottom:var(--space-2)">
+                    Tissu(s) souhaité(s)
+                  </p>
+                  <p class="form-hint">Cliquez sur un ou plusieurs tissus pour les sélectionner. Les tissus épuisés ne sont pas sélectionnables.</p>
+                  <div id="tissus-selector" class="tissus-selector-grid"></div>
+                </div>
+
+                <div class="form-group">
+                  <p style="font-size:var(--text-sm);font-weight:500;margin-bottom:var(--space-2)">
+                    Tissu de doublure <em style="font-weight:400;color:var(--color-text-muted)">(optionnel)</em>
+                  </p>
+                  <p class="form-hint">Si vous souhaitez une doublure dans un tissu différent.</p>
+                  <div id="doublure-selector" class="tissus-selector-grid"></div>
+                </div>
+
+                <div class="form-group">
+                  <label for="precisions-couture">Précisions, mesures, idées</label>
+                  <textarea
+                    id="precisions-couture"
+                    name="precisions_couture"
+                    rows="4"
+                    placeholder="Taille, tour de tête, longueur souhaitée, idées de personnalisation…"
+                  ></textarea>
+                </div>
+              </fieldset>
+            </div>
+
+            <!-- ─ Section Bijoux ───────────────────────── -->
+            <div id="section-bijoux" hidden>
+              <fieldset class="form-section">
+                <legend>Votre bijou</legend>
+
+                <div class="form-group">
+                  <label for="type-bijou">Type de bijou *</label>
+                  <select id="type-bijou" name="type_bijou" data-required>
+                    <option value="">— Choisir —</option>
+                    <option value="boucles-oreilles">Boucles d'oreilles</option>
+                    <option value="collier">Collier ras-de-cou</option>
+                    <option value="bracelet-hanche">Bracelet de hanche</option>
+                    <option value="bracelet">Bracelet de poignet</option>
+                    <option value="autre">Autre (préciser dans la description)</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="modele-bijou">Modèle de référence</label>
+                  <select id="modele-bijou" name="modele_bijou">
+                    <option value="">— Choisir un modèle ou une idée libre —</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label>Thème de couleur des perles</label>
+                  <p class="form-hint">Sélectionnez une ou plusieurs couleurs.</p>
+                  <div id="couleurs-chips" class="color-chips">
+                    <!-- Rempli par order-form.js -->
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label>Base métal *</label>
+                  <div class="radio-inline-group">
+                    <label class="radio-inline">
+                      <input type="radio" name="base_metal" value="or" data-required>
+                      <span>Or</span>
+                    </label>
+                    <label class="radio-inline">
+                      <input type="radio" name="base_metal" value="argent">
+                      <span>Argent</span>
+                    </label>
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <label for="inspiration">Inspiration / description</label>
+                  <textarea
+                    id="inspiration"
+                    name="inspiration"
+                    rows="4"
+                    placeholder="Décrivez votre bijou idéal : une occasion, une tenue, une ambiance, une référence…"
+                  ></textarea>
+                </div>
+              </fieldset>
+            </div>
+
+            <!-- ─ Coordonnées ─────────────────────────── -->
+            <fieldset class="form-section">
+              <legend>Vos coordonnées</legend>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="prenom">Prénom *</label>
+                  <input
+                    type="text"
+                    id="prenom"
+                    name="prenom"
+                    required
+                    autocomplete="given-name"
+                    placeholder="Marie"
+                  >
+                </div>
+                <div class="form-group">
+                  <label for="nom">Nom *</label>
+                  <input
+                    type="text"
+                    id="nom"
+                    name="nom"
+                    required
+                    autocomplete="family-name"
+                    placeholder="Dupont"
+                  >
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="email">Adresse email *</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  required
+                  autocomplete="email"
+                  placeholder="marie@exemple.fr"
+                >
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message complémentaire</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="3"
+                  placeholder="Délai souhaité, questions, précisions supplémentaires…"
+                ></textarea>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" name="livraison" value="oui">
+                  <span>Je souhaite une livraison (des frais de port s'ajouteront au tarif)</span>
+                </label>
+              </div>
+            </fieldset>
+
+            <div class="form-submit">
+              <button type="submit" class="btn btn-primary btn-lg">
+                Envoyer ma commande
+              </button>
+              <p class="form-note">
+                Assa vous répondra par email sous 48h pour confirmer les détails et le prix final.
+              </p>
+            </div>
+
+          </form>
+
+          <!-- Message de confirmation (affiché après envoi) -->
+          <div id="form-confirmation" hidden>
+            <div class="confirmation-card">
+              <span class="confirmation-icon" aria-hidden="true">✓</span>
+              <h2>Demande envoyée !</h2>
+              <p>
+                Merci pour votre commande. Assa a bien reçu votre message et vous répondra
+                sous 48h pour confirmer les détails et le tarif.
+              </p>
+              <a href="index.html" class="btn btn-secondary">Retour à l'accueil</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Pied de page ───────────────────────────────────── -->
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <a href="index.html" class="logo">Assa Créations</a>
+          <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
+        </div>
+        <nav class="footer-nav" aria-label="Navigation pied de page">
+          <h3>Pages</h3>
+          <a href="couture.html">Couture</a>
+          <a href="bijoux.html">Bijoux</a>
+          <a href="commander.html">Commander</a>
+          <a href="a-propos.html">À propos</a>
+        </nav>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <a href="mailto:contact@assacreation.com">contact@assacreation.com</a>
+        </div>
+      </div>
+      <p class="footer-copy">&copy; <span id="year"></span> Assa Créations</p>
+    </div>
+  </footer>
+
+  <script type="module" src="js/order-form.js"></script>
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>
