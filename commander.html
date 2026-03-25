@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Commander — Assa Créations</title>
   <meta name="description" content="Passez votre commande personnalisée : choisissez vos tissus, vos couleurs de perles, et envoyez votre demande directement à Assa.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" href="images/welcome/tab_logo.png">
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/main.css">
@@ -54,12 +56,20 @@
                 method="POST"
                 novalidate>
 
+            <!-- Running item counter (unified across couture + bijoux) -->
+            <div class="order-counter" id="order-counter" aria-live="polite">
+              <span><span class="counter-value">0</span> / 5 articles au total</span>
+            </div>
+
+            <!-- Human-readable category field for Formspree email -->
+            <input type="hidden" name="Catégorie" id="cat-hidden" value="">
+
             <!-- Step 1: Category selection -->
             <fieldset class="form-section">
               <legend>Que souhaitez-vous commander ?</legend>
               <div class="radio-cards">
                 <label class="radio-card">
-                  <input type="radio" name="categorie" value="couture" required>
+                  <input type="radio" name="_categorie" value="couture" required>
                   <div class="radio-card-inner">
                     <span class="radio-card-icon" aria-hidden="true">
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
@@ -73,7 +83,7 @@
                   </div>
                 </label>
                 <label class="radio-card">
-                  <input type="radio" name="categorie" value="bijoux" required>
+                  <input type="radio" name="_categorie" value="bijoux" required>
                   <div class="radio-card-inner">
                     <span class="radio-card-icon" aria-hidden="true">
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
@@ -111,58 +121,24 @@
             <!-- Bijoux section -->
             <div id="section-bijoux" hidden>
               <fieldset class="form-section">
-                <legend>Votre bijou</legend>
-
-                <div class="form-group">
-                  <label for="type-bijou">Type de bijou *</label>
-                  <select id="type-bijou" name="type_bijou" data-required>
-                    <option value="">— Choisir —</option>
-                    <option value="boucles-oreilles">Boucles d'oreilles</option>
-                    <option value="collier">Collier ras-de-cou</option>
-                    <option value="bracelet-hanche">Bracelet de hanche</option>
-                    <option value="bracelet">Bracelet de poignet</option>
-                    <option value="autre">Autre (préciser dans la description)</option>
-                  </select>
+                <legend>Vos bijoux</legend>
+                <p class="form-hint">Ajoutez les bijoux souhaités. Pour chaque pièce, choisissez le modèle et la base métal si applicable.</p>
+                <div id="bijoux-items" class="articles-list">
+                  <!-- Populated by order-form.js -->
                 </div>
-
-                <div class="form-group">
-                  <label for="modele-bijou">Modèle de référence</label>
-                  <select id="modele-bijou" name="modele_bijou">
-                    <option value="">— Choisir un modèle ou une idée libre —</option>
-                  </select>
+                <div class="bijou-add-wrap">
+                  <button type="button" id="add-bijou-btn" class="btn btn-secondary">+ Ajouter un bijou</button>
                 </div>
+              </fieldset>
 
-                <div class="form-group">
-                  <label>Thème de couleur des perles</label>
-                  <p class="form-hint">Sélectionnez une ou plusieurs couleurs.</p>
-                  <div id="couleurs-chips" class="color-chips">
-                    <!-- Populated by order-form.js -->
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label>Base métal *</label>
-                  <div class="radio-inline-group">
-                    <label class="radio-inline">
-                      <input type="radio" name="base_metal" value="or" data-required>
-                      <span>Or</span>
-                    </label>
-                    <label class="radio-inline">
-                      <input type="radio" name="base_metal" value="argent">
-                      <span>Argent</span>
-                    </label>
-                  </div>
-                </div>
-
-                <div class="form-group">
-                  <label for="inspiration">Inspiration / description</label>
-                  <textarea
-                    id="inspiration"
-                    name="inspiration"
-                    rows="4"
-                    placeholder="Décrivez votre bijou idéal : une occasion, une tenue, une ambiance, une référence…"
-                  ></textarea>
-                </div>
+              <fieldset class="form-section">
+                <legend>Notes</legend>
+                <textarea
+                  id="inspiration"
+                  name="inspiration"
+                  rows="4"
+                  placeholder="Occasion, tenue, ambiance, idées de personnalisation…"
+                ></textarea>
               </fieldset>
             </div>
 
@@ -228,7 +204,7 @@
             <!-- Price summary -->
             <div id="price-summary" class="price-summary" hidden>
               <div class="price-summary-row">
-                <span id="price-count" class="price-count"></span>
+                <span>Total estimé</span>
                 <span id="price-total" class="price-total-amount"></span>
               </div>
               <p class="form-hint" style="margin-top:var(--space-2)">Prix indicatifs — ne prend pas en compte les frais de livraison.</p>

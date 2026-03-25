@@ -1,10 +1,18 @@
-// order-form.js — Dynamic order form (category toggle, article selector, fabric picker)
+// order-form.js — Dynamic order form (couture article selector + bijoux item picker)
 
 let tissusData = [];
 let bijouxData = [];
 
 const MAX_PER_ARTICLE = 5;
-const MAX_TOTAL       = 10;
+const MAX_TOTAL       = 5; // shared limit across couture + bijoux
+
+// ── Fabric availability labels ────────────────────────
+
+const DISPO_LABELS = {
+  disponible: 'Disponible',
+  limité:     'Quantité limitée',
+  épuisé:     'Épuisé',
+};
 
 async function fetchJSON(url) {
   const res = await fetch(url);
@@ -12,21 +20,7 @@ async function fetchJSON(url) {
   return res.json();
 }
 
-// ── Bead colour options ───────────────────────────────
-
-const COULEURS = [
-  { value: 'beige-dore',  label: 'Beige doré',  hex: '#D4B896' },
-  { value: 'terracotta',  label: 'Terracotta',  hex: '#B5623D' },
-  { value: 'vert-foret',  label: 'Vert forêt',  hex: '#3D7A5C' },
-  { value: 'bleu-nuit',   label: 'Bleu nuit',   hex: '#3A5A8A' },
-  { value: 'bordeaux',    label: 'Bordeaux',    hex: '#7A2040' },
-  { value: 'noir',        label: 'Noir',        hex: '#1A1A1A' },
-  { value: 'blanc-creme', label: 'Blanc crème', hex: '#F0E9DC' },
-  { value: 'rose',        label: 'Rose',        hex: '#D4809C' },
-  { value: 'jaune-dore',  label: 'Jaune doré',  hex: '#D4A020' },
-];
-
-// ── Quantity helpers ──────────────────────────────────
+// ── Unified item count (couture qty + bijoux rows) ────
 
 function getTotalQty() {
   let total = 0;
@@ -34,73 +28,206 @@ function getTotalQty() {
     const cb = row.querySelector('input[type="checkbox"]');
     if (cb?.checked) total += parseInt(row.querySelector('.qty-input')?.value || 0, 10);
   });
+  total += document.querySelectorAll('.bijou-item-row').length;
   return total;
 }
 
-// Disable +/- buttons that would exceed per-article (5) or global (10) limits
+// Update the counter pill at the top of the form
+function updateOrderCounter() {
+  const el = document.getElementById('order-counter');
+  if (!el) return;
+  const total = getTotalQty();
+  el.querySelector('.counter-value').textContent = total;
+  el.classList.toggle('is-at-limit', total >= MAX_TOTAL);
+}
+
+// ── Quantity controls (couture) ───────────────────────
+
+// Disable +/- buttons that would exceed per-article (5) or global (5) limits
 function updateQtyControls() {
   const total = getTotalQty();
   document.querySelectorAll('#articles-selector .article-row').forEach(row => {
-    const cb      = row.querySelector('input[type="checkbox"]');
-    const plusBtn = row.querySelector('.qty-plus');
+    const cb       = row.querySelector('input[type="checkbox"]');
+    const plusBtn  = row.querySelector('.qty-plus');
     const minusBtn = row.querySelector('.qty-minus');
-    const qtyIn   = row.querySelector('.qty-input');
+    const qtyIn    = row.querySelector('.qty-input');
     if (!plusBtn || !qtyIn) return;
     const qty = parseInt(qtyIn.value, 10);
     plusBtn.disabled  = !cb?.checked || total >= MAX_TOTAL || qty >= MAX_PER_ARTICLE;
     minusBtn.disabled = !cb?.checked || qty <= 1;
   });
+  updateAddBijouBtn();
+  updateOrderCounter();
 }
 
-// ── Per-piece fabric picker ───────────────────────────
+// ── Fabric selection modal ────────────────────────────
 
-// Builds a single mini fabric picker (2-column scrollable radio grid) for one piece
+let fabricModalEl = null;
+let activeFabricContext = null;
+
+function buildFabricModal() {
+  const el = document.createElement('div');
+  el.className = 'fabric-modal';
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  el.hidden = true;
+  el.innerHTML = `
+    <div class="fabric-modal-backdrop"></div>
+    <div class="fabric-modal-panel">
+      <div class="fabric-modal-header">
+        <h3 class="fabric-modal-title"></h3>
+        <button type="button" class="fabric-modal-close" aria-label="Fermer">&times;</button>
+      </div>
+      <div class="fabric-modal-grid"></div>
+    </div>
+  `;
+  document.body.appendChild(el);
+
+  const grid = el.querySelector('.fabric-modal-grid');
+  tissusData.forEach(({ id, image, disponibilite }) => {
+    const epuise = disponibilite === 'épuisé';
+    const tile = document.createElement('button');
+    tile.type = 'button';
+    tile.className = `fabric-modal-tile${epuise ? ' is-epuise' : ''}`;
+    tile.dataset.fabricId  = id;
+    tile.dataset.fabricImg = image;
+    if (epuise) tile.disabled = true;
+    tile.innerHTML = `
+      <div class="fabric-modal-tile-img">
+        <img src="${image}" alt="Tissu n°${id}" loading="lazy">
+        <div class="fabric-modal-tile-check">✓</div>
+      </div>
+      <div class="fabric-modal-tile-footer">
+        <span class="fabric-modal-tile-num">n°${id}</span>
+        <span class="badge badge-${disponibilite}">${DISPO_LABELS[disponibilite]}</span>
+      </div>
+    `;
+    tile.addEventListener('click', () => selectFabric(id, image));
+    grid.appendChild(tile);
+  });
+
+  el.querySelector('.fabric-modal-backdrop').addEventListener('click', closeFabricModal);
+  el.querySelector('.fabric-modal-close').addEventListener('click', closeFabricModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !fabricModalEl?.hidden) closeFabricModal();
+  });
+
+  return el;
+}
+
+function openFabricModal(articleId, pieceIndex, triggerBtn, hiddenInput) {
+  if (!fabricModalEl) fabricModalEl = buildFabricModal();
+  activeFabricContext = { articleId, pieceIndex, triggerBtn, hiddenInput };
+
+  fabricModalEl.querySelector('.fabric-modal-title').textContent =
+    `Choisir un tissu — Pièce ${pieceIndex}`;
+
+  const currentId = hiddenInput.value;
+  fabricModalEl.querySelectorAll('.fabric-modal-tile').forEach(tile => {
+    tile.classList.toggle('is-selected', tile.dataset.fabricId === currentId);
+  });
+
+  fabricModalEl.hidden = false;
+  document.body.classList.add('fabric-modal-active');
+  fabricModalEl.querySelector('.fabric-modal-close').focus();
+}
+
+function closeFabricModal() {
+  if (!fabricModalEl) return;
+  fabricModalEl.hidden = true;
+  document.body.classList.remove('fabric-modal-active');
+  activeFabricContext?.triggerBtn?.focus();
+  activeFabricContext = null;
+}
+
+function selectFabric(fabricId, fabricImage) {
+  if (!activeFabricContext) return;
+  const { triggerBtn, hiddenInput } = activeFabricContext;
+
+  hiddenInput.value = fabricId;
+  triggerBtn.querySelector('.fabric-trigger-thumb').innerHTML =
+    `<img src="${fabricImage}" alt="Tissu n°${fabricId}" loading="lazy">`;
+  triggerBtn.querySelector('.fabric-trigger-caption').textContent = `n°${fabricId}`;
+  triggerBtn.classList.add('has-selection');
+  triggerBtn.classList.remove('is-missing');
+
+  closeFabricModal();
+}
+
+// ── Per-piece fabric trigger ──────────────────────────
+
 function buildFabricPick(articleId, pieceIndex) {
   const wrap = document.createElement('div');
   wrap.className = 'fabric-pick';
 
-  const lbl = document.createElement('span');
-  lbl.className = 'fabric-pick-label';
-  lbl.textContent = `Pièce ${pieceIndex}`;
-  wrap.appendChild(lbl);
+  const label = document.createElement('span');
+  label.className = 'fabric-pick-label';
+  label.textContent = `Pièce ${pieceIndex}`;
+  wrap.appendChild(label);
 
-  const scroll = document.createElement('div');
-  scroll.className = 'fabric-pick-scroll';
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type  = 'hidden';
+  hiddenInput.name  = `tissu_${articleId}_${pieceIndex}`;
+  hiddenInput.value = '';
+  wrap.appendChild(hiddenInput);
 
-  tissusData.forEach(({ id, image, disponibilite }) => {
-    const epuise = disponibilite === 'épuisé';
-    const tile = document.createElement('label');
-    tile.className = `fabric-pick-tile${epuise ? ' is-epuise' : ''}`;
-    tile.title = `Tissu n°${id}`;
-    tile.innerHTML = `
-      <input type="radio" name="tissu_${articleId}_${pieceIndex}" value="${id}" ${epuise ? 'disabled' : ''}>
-      <div class="fabric-pick-tile-img">
-        <img src="${image}" alt="Tissu ${id}" loading="lazy">
-        <div class="fabric-pick-tile-check">✓</div>
-      </div>
-    `;
-    scroll.appendChild(tile);
-  });
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'fabric-trigger';
+  btn.setAttribute('aria-label', `Choisir le tissu pour la pièce ${pieceIndex}`);
+  btn.innerHTML = `
+    <div class="fabric-trigger-thumb">
+      <span class="fabric-trigger-placeholder" aria-hidden="true">+</span>
+    </div>
+    <span class="fabric-trigger-caption">Choisir</span>
+  `;
+  btn.addEventListener('click', () => openFabricModal(articleId, pieceIndex, btn, hiddenInput));
+  wrap.appendChild(btn);
 
-  wrap.appendChild(scroll);
   return wrap;
 }
 
-// Rebuild the fabric picker strip under an article row for the given quantity
+// Rebuild fabric strip, preserving existing selections
 function rebuildFabricStrip(row, articleId, qty) {
   const existing = row.querySelector('.article-fabric-strip');
-  if (existing) existing.remove();
+
+  const saved = {};
+  if (existing) {
+    existing.querySelectorAll('.fabric-pick').forEach((pick, i) => {
+      const pieceIndex = i + 1;
+      const input = pick.querySelector(`input[name="tissu_${articleId}_${pieceIndex}"]`);
+      if (input?.value) saved[pieceIndex] = input.value;
+    });
+    existing.remove();
+  }
+
   if (qty < 1) return;
 
   const strip = document.createElement('div');
   strip.className = 'article-fabric-strip';
   for (let i = 1; i <= qty; i++) {
-    strip.appendChild(buildFabricPick(articleId, i));
+    const pick = buildFabricPick(articleId, i);
+
+    if (saved[i]) {
+      const fabricId = saved[i];
+      const entry    = tissusData.find(t => String(t.id) === String(fabricId));
+      const input    = pick.querySelector(`input[name="tissu_${articleId}_${i}"]`);
+      const btn      = pick.querySelector('.fabric-trigger');
+      if (entry && input && btn) {
+        input.value = fabricId;
+        btn.querySelector('.fabric-trigger-thumb').innerHTML =
+          `<img src="${entry.image}" alt="Tissu n°${fabricId}" loading="lazy">`;
+        btn.querySelector('.fabric-trigger-caption').textContent = `n°${fabricId}`;
+        btn.classList.add('has-selection');
+      }
+    }
+
+    strip.appendChild(pick);
   }
   row.appendChild(strip);
 }
 
-// ── Article checklist ─────────────────────────────────
+// ── Article checklist (couture) ───────────────────────
 
 function renderArticlesSelector(couture) {
   const container = document.getElementById('articles-selector');
@@ -114,7 +241,7 @@ function renderArticlesSelector(couture) {
     header.className = 'article-header';
     header.innerHTML = `
       <label class="article-check">
-        <input type="checkbox" name="articles" value="${id}" data-price="${price}" data-name="${name}">
+        <input type="checkbox" name="articles" value="${name}" data-price="${price}" data-name="${name}" data-id="${id}">
         <span class="article-name">${name}</span>
         ${price > 0 ? `<span class="article-price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 0 })} €</span>` : ''}
       </label>
@@ -132,18 +259,21 @@ function renderArticlesSelector(couture) {
     const minusBtn = header.querySelector('.qty-minus');
     const plusBtn  = header.querySelector('.qty-plus');
 
+    qtyIn.disabled = true;
+
     cb.addEventListener('change', () => {
-      qtyDiv.hidden = !cb.checked;
+      qtyDiv.hidden  = !cb.checked;
+      qtyIn.disabled = !cb.checked;
       rebuildFabricStrip(row, id, cb.checked ? parseInt(qtyIn.value, 10) : 0);
       updateQtyControls();
       updatePriceSummary();
     });
 
     function changeQty(delta) {
-      const current = parseInt(qtyIn.value, 10);
+      const current          = parseInt(qtyIn.value, 10);
       const totalWithoutThis = getTotalQty() - current;
-      const maxAllowed = Math.min(MAX_PER_ARTICLE, MAX_TOTAL - totalWithoutThis);
-      const newQty = Math.max(1, Math.min(maxAllowed, current + delta));
+      const maxAllowed       = Math.min(MAX_PER_ARTICLE, MAX_TOTAL - totalWithoutThis);
+      const newQty           = Math.max(1, Math.min(maxAllowed, current + delta));
       if (newQty === current) return;
       qtyIn.value = newQty;
       rebuildFabricStrip(row, id, newQty);
@@ -158,40 +288,222 @@ function renderArticlesSelector(couture) {
   });
 }
 
-// ── Bijoux model dropdown ─────────────────────────────
+// ── Bijoux item picker modal ──────────────────────────
 
-function populateBijouxSelect(bijoux) {
-  const select = document.getElementById('modele-bijou');
-  if (!select) return;
-  bijoux.forEach(({ id, name }) => {
-    const opt = document.createElement('option');
-    opt.value = id;
-    opt.textContent = name;
-    select.appendChild(opt);
+let bijouModalEl      = null;
+let activeBijouContext = null;
+let bijouItemCounter  = 0; // unique suffix for form field names
+
+function buildBijouModal() {
+  const el = document.createElement('div');
+  el.className = 'fabric-modal'; // reuses the same CSS
+  el.setAttribute('role', 'dialog');
+  el.setAttribute('aria-modal', 'true');
+  el.hidden = true;
+  el.innerHTML = `
+    <div class="fabric-modal-backdrop"></div>
+    <div class="fabric-modal-panel">
+      <div class="fabric-modal-header">
+        <h3 class="fabric-modal-title">Choisir un bijou</h3>
+        <button type="button" class="fabric-modal-close" aria-label="Fermer">&times;</button>
+      </div>
+      <div class="fabric-modal-grid bijou-modal-grid"></div>
+    </div>
+  `;
+  document.body.appendChild(el);
+
+  const grid = el.querySelector('.bijou-modal-grid');
+  bijouxData.forEach(({ id, name, price, base, image }) => {
+    const tile = document.createElement('button');
+    tile.type  = 'button';
+    tile.className = 'fabric-modal-tile';
+    tile.dataset.bijouxId    = id;
+    tile.dataset.bijouxName  = name;
+    tile.dataset.bijouxBase  = JSON.stringify(base);
+    tile.dataset.bijouxPrice = price;
+    const priceStr = price > 0
+      ? `<span class="bijou-tile-price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 0 })} €</span>`
+      : '';
+    tile.innerHTML = `
+      <div class="fabric-modal-tile-img">
+        <img src="${image}" alt="${name}" loading="lazy">
+        <div class="fabric-modal-tile-check">✓</div>
+      </div>
+      <div class="fabric-modal-tile-footer">
+        <span class="fabric-modal-tile-num">${name}</span>
+        ${priceStr}
+      </div>
+    `;
+    tile.addEventListener('click', () => selectBijou(id, image, name, base, price));
+    grid.appendChild(tile);
   });
-  const libre = document.createElement('option');
-  libre.value = 'libre';
-  libre.textContent = 'Idée libre / thème (préciser dans la description)';
-  select.appendChild(libre);
 
-  select.addEventListener('change', updatePriceSummary);
+  el.querySelector('.fabric-modal-backdrop').addEventListener('click', closeBijouModal);
+  el.querySelector('.fabric-modal-close').addEventListener('click', closeBijouModal);
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !bijouModalEl?.hidden) closeBijouModal();
+  });
+
+  return el;
 }
 
-// ── Colour chip checkboxes ────────────────────────────
+function openBijouModal(triggerBtn, hiddenInput, infoEl) {
+  if (!bijouModalEl) bijouModalEl = buildBijouModal();
+  activeBijouContext = { triggerBtn, hiddenInput, infoEl };
 
-function renderColorChips() {
-  const container = document.getElementById('couleurs-chips');
-  if (!container) return;
-  COULEURS.forEach(({ value, label, hex }) => {
-    const chipLabel = document.createElement('label');
-    chipLabel.className = 'color-chip';
-    chipLabel.innerHTML = `
-      <input type="checkbox" name="couleurs" value="${value}">
-      <span class="color-dot" style="background-color:${hex}"></span>
-      ${label}
-    `;
-    container.appendChild(chipLabel);
+  // Highlight current selection
+  const currentId = hiddenInput.value;
+  bijouModalEl.querySelectorAll('.fabric-modal-tile').forEach(tile => {
+    tile.classList.toggle('is-selected', tile.dataset.bijouxId === currentId);
   });
+
+  bijouModalEl.hidden = false;
+  document.body.classList.add('fabric-modal-active');
+  bijouModalEl.querySelector('.fabric-modal-close').focus();
+}
+
+function closeBijouModal() {
+  if (!bijouModalEl) return;
+  bijouModalEl.hidden = true;
+  document.body.classList.remove('fabric-modal-active');
+  activeBijouContext?.triggerBtn?.focus();
+  activeBijouContext = null;
+}
+
+function selectBijou(bijouxId, image, name, base, price) {
+  if (!activeBijouContext) return;
+  const { triggerBtn, hiddenInput, infoEl } = activeBijouContext;
+  const row = triggerBtn.closest('.bijou-item-row');
+
+  // Store selection
+  hiddenInput.value          = name; // human-readable name in email
+  row.dataset.bijouxId       = bijouxId;
+  row.dataset.bijouxPrice    = price;
+
+  // Update trigger thumbnail
+  triggerBtn.querySelector('.fabric-trigger-thumb').innerHTML =
+    `<img src="${image}" alt="${name}" loading="lazy">`;
+  triggerBtn.querySelector('.fabric-trigger-caption').textContent = name;
+  triggerBtn.classList.add('has-selection');
+  triggerBtn.classList.remove('is-missing');
+
+  // Show the item name
+  infoEl.querySelector('.bijou-item-name').textContent = name;
+
+  // Show/hide metal choice depending on whether multiple bases exist
+  const metalGroup  = infoEl.querySelector('.bijou-metal-group');
+  const metalHidden = row.querySelector('input.bijou-metal-hidden');
+  if (metalGroup && metalHidden) {
+    if (base.length <= 1) {
+      // Single base — auto-set, no choice needed
+      metalGroup.hidden  = true;
+      metalHidden.value  = base[0] === 'or' ? 'Or' : 'Argent';
+    } else {
+      // Multiple bases — show radio choice, reset previous selection
+      metalGroup.hidden = false;
+      metalGroup.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+      metalHidden.value = '';
+    }
+  }
+
+  updatePriceSummary();
+  closeBijouModal();
+}
+
+// ── Bijoux item rows ──────────────────────────────────
+
+function addBijouItem() {
+  if (getTotalQty() >= MAX_TOTAL) return;
+
+  bijouItemCounter++;
+  const itemId    = bijouItemCounter;
+  const container = document.getElementById('bijoux-items');
+
+  const row = document.createElement('div');
+  row.className = 'article-row bijou-item-row';
+  row.dataset.bijouxId    = '';
+  row.dataset.bijouxPrice = '0';
+
+  // Hidden inputs submitted with the form
+  const hiddenInput = document.createElement('input');
+  hiddenInput.type  = 'hidden';
+  hiddenInput.name  = `bijou_${itemId}`;
+  hiddenInput.value = '';
+
+  const metalHidden = document.createElement('input');
+  metalHidden.type      = 'hidden';
+  metalHidden.name      = `bijou_${itemId}_metal`;
+  metalHidden.value     = '';
+  metalHidden.className = 'bijou-metal-hidden';
+
+  // Trigger button
+  const triggerBtn = document.createElement('button');
+  triggerBtn.type      = 'button';
+  triggerBtn.className = 'fabric-trigger bijou-trigger';
+  triggerBtn.setAttribute('aria-label', 'Choisir un bijou');
+  triggerBtn.innerHTML = `
+    <div class="fabric-trigger-thumb">
+      <span class="fabric-trigger-placeholder" aria-hidden="true">+</span>
+    </div>
+    <span class="fabric-trigger-caption">Choisir</span>
+  `;
+
+  // Info area: name + metal choice
+  const infoEl = document.createElement('div');
+  infoEl.className = 'bijou-info';
+  infoEl.innerHTML = `
+    <span class="bijou-item-name article-name"></span>
+    <div class="bijou-metal-group radio-inline-group" hidden>
+      <label class="radio-inline">
+        <input type="radio" name="_metal_${itemId}" value="or">
+        <span>Or</span>
+      </label>
+      <label class="radio-inline">
+        <input type="radio" name="_metal_${itemId}" value="argent">
+        <span>Argent</span>
+      </label>
+    </div>
+  `;
+
+  // Sync radio → hidden input (human-readable label for email)
+  infoEl.querySelectorAll('input[type="radio"]').forEach(radio => {
+    radio.addEventListener('change', () => {
+      metalHidden.value = radio.value === 'or' ? 'Or' : 'Argent';
+    });
+  });
+
+  // Remove button
+  const removeBtn = document.createElement('button');
+  removeBtn.type      = 'button';
+  removeBtn.className = 'qty-btn remove-bijou-btn';
+  removeBtn.setAttribute('aria-label', 'Supprimer ce bijou');
+  removeBtn.textContent = '×';
+  removeBtn.addEventListener('click', () => {
+    row.remove();
+    updateQtyControls();
+    updatePriceSummary();
+  });
+
+  triggerBtn.addEventListener('click', () => openBijouModal(triggerBtn, hiddenInput, infoEl));
+
+  const header = document.createElement('div');
+  header.className = 'article-header';
+  header.appendChild(triggerBtn);
+  header.appendChild(infoEl);
+  header.appendChild(removeBtn);
+
+  row.appendChild(hiddenInput);
+  row.appendChild(metalHidden);
+  row.appendChild(header);
+  container.appendChild(row);
+
+  updateQtyControls();
+  updatePriceSummary();
+}
+
+function updateAddBijouBtn() {
+  const btn = document.getElementById('add-bijou-btn');
+  if (btn) btn.disabled = getTotalQty() >= MAX_TOTAL;
 }
 
 // ── Live price summary ────────────────────────────────
@@ -199,34 +511,23 @@ function renderColorChips() {
 function updatePriceSummary() {
   const summaryEl = document.getElementById('price-summary');
   const totalEl   = document.getElementById('price-total');
-  const countEl   = document.getElementById('price-count');
   if (!summaryEl || !totalEl) return;
 
   let total    = 0;
-  let totalQty = 0;
   let hasPrice = false;
 
-  const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
+  // Couture articles
+  document.querySelectorAll('#articles-selector input[type="checkbox"]:checked').forEach(cb => {
+    const price = parseFloat(cb.dataset.price) || 0;
+    const qty   = parseInt(document.querySelector(`input[name="qty_${cb.dataset.id}"]`)?.value || 1, 10);
+    if (price > 0) { total += price * qty; hasPrice = true; }
+  });
 
-  if (categorie === 'couture') {
-    document.querySelectorAll('#articles-selector input[type="checkbox"]:checked').forEach(cb => {
-      const price = parseFloat(cb.dataset.price) || 0;
-      const qty   = parseInt(document.querySelector(`input[name="qty_${cb.value}"]`)?.value || 1, 10);
-      totalQty += qty;
-      if (price > 0) { total += price * qty; hasPrice = true; }
-    });
-    if (countEl) {
-      const remaining = MAX_TOTAL - totalQty;
-      countEl.textContent = totalQty > 0
-        ? `${totalQty} article${totalQty > 1 ? 's' : ''} — ${remaining} restant${remaining > 1 ? 's' : ''} (max ${MAX_TOTAL})`
-        : '';
-    }
-  } else if (categorie === 'bijoux') {
-    const modelId = document.getElementById('modele-bijou')?.value;
-    const item    = bijouxData.find(b => b.id === modelId);
-    if (item?.price > 0) { total = item.price; hasPrice = true; }
-    if (countEl) countEl.textContent = '';
-  }
+  // Bijoux items
+  document.querySelectorAll('.bijou-item-row').forEach(row => {
+    const price = parseFloat(row.dataset.bijouxPrice) || 0;
+    if (price > 0) { total += price; hasPrice = true; }
+  });
 
   if (hasPrice && total > 0) {
     summaryEl.hidden = false;
@@ -234,27 +535,26 @@ function updatePriceSummary() {
   } else {
     summaryEl.hidden = true;
   }
+
+  updateOrderCounter();
 }
 
-// ── Category toggle (couture / bijoux) ────────────────
+// ── Category toggle ───────────────────────────────────
 
 function setupCategoryToggle() {
-  const radios         = document.querySelectorAll('input[name="categorie"]');
+  const radios         = document.querySelectorAll('input[name="_categorie"]');
   const sectionCouture = document.getElementById('section-couture');
   const sectionBijoux  = document.getElementById('section-bijoux');
   if (!sectionCouture || !sectionBijoux) return;
 
-  function applyRequired(section, enable) {
-    section.querySelectorAll('[data-required]').forEach(el => { el.required = enable; });
-  }
-
   radios.forEach(radio => {
     radio.addEventListener('change', () => {
-      const isCouture = radio.value === 'couture';
+      const isCouture       = radio.value === 'couture';
       sectionCouture.hidden = !isCouture;
       sectionBijoux.hidden  = isCouture;
-      applyRequired(sectionCouture, isCouture);
-      applyRequired(sectionBijoux, !isCouture);
+      // Populate the readable hidden field submitted to Formspree
+      const catHidden = document.getElementById('cat-hidden');
+      if (catHidden) catHidden.value = isCouture ? 'Couture' : 'Bijoux';
       updatePriceSummary();
     });
   });
@@ -270,12 +570,62 @@ function setupFormSubmit() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    // Require at least one article checked for couture orders
-    const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
+    const categorie = document.querySelector('input[name="_categorie"]:checked')?.value;
+
     if (categorie === 'couture') {
       const checked = document.querySelectorAll('#articles-selector input[type="checkbox"]:checked');
       if (checked.length === 0) {
         alert('Veuillez sélectionner au moins un article.');
+        return;
+      }
+
+      // Every piece must have a fabric chosen
+      let missingFabric = false;
+      document.querySelectorAll('#articles-selector .article-row').forEach(row => {
+        const cb = row.querySelector('input[type="checkbox"]');
+        if (!cb?.checked) return;
+        const qty       = parseInt(row.querySelector('.qty-input')?.value || 1, 10);
+        const articleId = cb.dataset.id;
+        for (let i = 1; i <= qty; i++) {
+          const fabricInput = row.querySelector(`input[name="tissu_${articleId}_${i}"]`);
+          if (!fabricInput?.value) {
+            missingFabric = true;
+            fabricInput?.closest('.fabric-pick')
+              ?.querySelector('.fabric-trigger')
+              ?.classList.add('is-missing');
+          }
+        }
+      });
+      if (missingFabric) {
+        alert('Veuillez choisir un tissu pour chaque article sélectionné.');
+        return;
+      }
+    }
+
+    if (categorie === 'bijoux') {
+      const bijouxRows = document.querySelectorAll('.bijou-item-row');
+      if (bijouxRows.length === 0) {
+        alert('Veuillez ajouter au moins un bijou.');
+        return;
+      }
+
+      let invalid = false;
+      bijouxRows.forEach(row => {
+        const hiddenInput = row.querySelector('input[name^="bijou_"]:not(.bijou-metal-hidden)');
+        if (!hiddenInput?.value) {
+          invalid = true;
+          row.querySelector('.bijou-trigger')?.classList.add('is-missing');
+        }
+        // Metal choice required when multiple bases are available
+        const metalGroup  = row.querySelector('.bijou-metal-group');
+        const metalHidden = row.querySelector('.bijou-metal-hidden');
+        if (!metalGroup?.hidden && !metalHidden?.value) {
+          invalid = true;
+          metalGroup.classList.add('metal-missing');
+        }
+      });
+      if (invalid) {
+        alert('Veuillez compléter le choix de bijou et de base métal pour chaque article.');
         return;
       }
     }
@@ -322,10 +672,11 @@ async function init() {
     bijouxData = bijoux;
 
     renderArticlesSelector(coutureData);
-    populateBijouxSelect(bijoux);
-    renderColorChips();
     setupCategoryToggle();
     setupFormSubmit();
+
+    document.getElementById('add-bijou-btn')
+      ?.addEventListener('click', addBijouItem);
   } catch (err) {
     console.error('Failed to initialise order form:', err);
   }

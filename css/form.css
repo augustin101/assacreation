@@ -10,6 +10,36 @@
   margin-inline: auto;
 }
 
+/* ── Order counter (top of form) ─────────────────────── */
+
+.order-counter {
+  display: flex;
+  align-items: center;
+  padding: var(--space-3) var(--space-5);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-6);
+  transition: border-color var(--transition), color var(--transition), background-color var(--transition);
+}
+
+.order-counter .counter-value {
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.order-counter.is-at-limit {
+  background-color: rgba(181, 98, 61, 0.06);
+  border-color: var(--color-terracotta);
+  color: var(--color-terracotta);
+}
+
+.order-counter.is-at-limit .counter-value {
+  color: var(--color-terracotta);
+}
+
 /* ── Fieldset sections ───────────────────────────────── */
 
 .form-section {
@@ -269,7 +299,7 @@ select {
 
 /* ── Per-piece fabric picker strip ───────────────────── */
 
-/* Horizontal scrollable row of fabric pickers, one per piece */
+/* Horizontal scrollable row of trigger buttons, one per piece */
 .article-fabric-strip {
   display: flex;
   gap: var(--space-3);
@@ -280,9 +310,7 @@ select {
   scrollbar-color: var(--color-border) transparent;
 }
 
-.article-fabric-strip::-webkit-scrollbar {
-  height: 4px;
-}
+.article-fabric-strip::-webkit-scrollbar { height: 4px; }
 .article-fabric-strip::-webkit-scrollbar-thumb {
   background-color: var(--color-border);
   border-radius: 2px;
@@ -291,12 +319,13 @@ select {
 .fabric-pick {
   display: flex;
   flex-direction: column;
-  gap: var(--space-2);
+  align-items: center;
+  gap: var(--space-1);
   flex-shrink: 0;
 }
 
 .fabric-pick-label {
-  font-size: 0.7rem;
+  font-size: 0.65rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
@@ -304,65 +333,193 @@ select {
   white-space: nowrap;
 }
 
-/* 2-column scrollable grid of fabric thumbnails */
-.fabric-pick-scroll {
-  width: 112px;
-  height: 128px;
-  overflow-y: auto;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
+/* Trigger button — compact square that opens the fabric modal */
+.fabric-trigger {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  width: 68px;
   padding: var(--space-2);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3px;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
   background-color: var(--color-bg);
-  scrollbar-width: thin;
-  scrollbar-color: var(--color-border) transparent;
-}
-
-.fabric-pick-scroll::-webkit-scrollbar { width: 4px; }
-.fabric-pick-scroll::-webkit-scrollbar-thumb {
-  background-color: var(--color-border);
-  border-radius: 2px;
-}
-
-.fabric-pick-tile {
   cursor: pointer;
-  display: block;
+  transition: border-color var(--transition), background-color var(--transition);
 }
 
-.fabric-pick-tile.is-epuise {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.fabric-pick-tile input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.fabric-pick-tile-img {
-  position: relative;
-  aspect-ratio: 1;
-  border-radius: 3px;
-  overflow: hidden;
-  border: 2px solid transparent;
-  transition: border-color var(--transition);
-}
-
-.fabric-pick-tile:has(input:checked) .fabric-pick-tile-img {
+.fabric-trigger:hover {
   border-color: var(--color-terracotta);
 }
 
-.fabric-pick-tile-img img {
+.fabric-trigger.has-selection {
+  border-color: var(--color-terracotta);
+  background-color: rgba(181, 98, 61, 0.05);
+}
+
+.fabric-trigger.is-missing {
+  border-color: #c0392b;
+  background-color: rgba(192, 57, 43, 0.06);
+}
+
+.fabric-trigger-thumb {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background-color: var(--color-surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.fabric-trigger-thumb img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.fabric-pick-tile-check {
+.fabric-trigger-placeholder {
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+  line-height: 1;
+}
+
+.fabric-trigger-caption {
+  font-size: 0.6rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+/* ── Fabric selection modal ──────────────────────────── */
+
+.fabric-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fabric-modal[hidden] {
+  display: none !important;
+}
+
+.fabric-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(42, 26, 14, 0.72);
+  cursor: pointer;
+}
+
+.fabric-modal-panel {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-white);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+  width: min(92vw, 620px);
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.fabric-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-5) var(--space-6);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.fabric-modal-title {
+  font-family: var(--font-heading);
+  font-size: var(--text-lg);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.fabric-modal-close {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-surface);
+  border: none;
+  font-size: var(--text-xl);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color var(--transition);
+}
+
+.fabric-modal-close:hover {
+  background-color: var(--color-border);
+}
+
+/* Scrollable grid of large fabric tiles */
+.fabric-modal-grid {
+  overflow-y: auto;
+  padding: var(--space-5);
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-auto-rows: 200px;
+  gap: var(--space-3);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.fabric-modal-tile {
+  cursor: pointer;
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background-color: var(--color-white);
+  transition: border-color var(--transition), transform var(--transition);
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+}
+
+.fabric-modal-tile:hover:not(:disabled) {
+  border-color: var(--color-terracotta);
+  transform: translateY(-2px);
+}
+
+.fabric-modal-tile.is-selected {
+  border-color: var(--color-terracotta);
+  background-color: rgba(181, 98, 61, 0.06);
+}
+
+.fabric-modal-tile.is-epuise {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fabric-modal-tile-img {
+  position: relative;
+  flex: 1;          /* grow to fill the tile height */
+  min-height: 120px;
+  background-color: var(--color-surface);
+  overflow: hidden;
+}
+
+.fabric-modal-tile-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fabric-modal-tile-check {
   position: absolute;
   inset: 0;
   display: flex;
@@ -370,14 +527,32 @@ select {
   justify-content: center;
   background-color: rgba(181, 98, 61, 0.55);
   color: white;
-  font-size: 0.8rem;
+  font-size: var(--text-xl);
   font-weight: 700;
   opacity: 0;
   transition: opacity var(--transition);
 }
 
-.fabric-pick-tile:has(input:checked) .fabric-pick-tile-check {
+.fabric-modal-tile.is-selected .fabric-modal-tile-check {
   opacity: 1;
+}
+
+.fabric-modal-tile-footer {
+  padding: var(--space-1) var(--space-2) var(--space-2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.fabric-modal-tile-num {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+body.fabric-modal-active {
+  overflow: hidden;
 }
 
 /* ── Color chips (bijoux) ────────────────────────────── */
@@ -541,6 +716,55 @@ select {
   max-width: 42ch;
   margin-inline: auto;
   margin-bottom: var(--space-8);
+}
+
+/* ── Bijoux item rows ────────────────────────────────── */
+
+/* Info area: item name + metal choice, fills remaining row width */
+.bijou-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.bijou-item-name {
+  font-size: var(--text-sm);
+  font-weight: 500;
+  color: var(--color-text);
+}
+
+/* "Add bijou" button spacing */
+.bijou-add-wrap {
+  margin-top: var(--space-4);
+}
+
+/* Remove button — sits at the right end of a bijou row */
+.remove-bijou-btn {
+  flex-shrink: 0;
+  font-size: var(--text-lg);
+  color: var(--color-text-muted);
+}
+
+/* Metal group highlighted when missing on submit attempt */
+.bijou-metal-group.metal-missing {
+  outline: 2px solid #c0392b;
+  border-radius: var(--radius-sm);
+  padding: var(--space-1);
+}
+
+/* ── Bijoux modal grid ───────────────────────────────── */
+
+/* Slightly wider tiles than fabric grid — jewelry names need space */
+.bijou-modal-grid {
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+}
+
+.bijou-tile-price {
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-terracotta);
 }
 
 /* ── Optional legend helper ──────────────────────────── */
