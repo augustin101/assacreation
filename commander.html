@@ -8,10 +8,14 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+  <link rel="stylesheet" href="css/form.css">
 </head>
 <body>
 
-  <!-- ── En-tête ───────────────────────────────────────── -->
+  <!-- ── Header ───────────────────────────────────────── -->
   <header class="site-header" id="site-header">
     <div class="container">
       <a href="index.html" class="logo">Assa Créations</a>
@@ -31,7 +35,7 @@
 
   <main>
 
-    <!-- ── Hero page ─────────────────────────────────────── -->
+    <!-- ── Page hero ─────────────────────────────────────── -->
     <section class="page-hero">
       <div class="container">
         <h1>Passer une commande</h1>
@@ -39,18 +43,18 @@
       </div>
     </section>
 
-    <!-- ── Formulaire ─────────────────────────────────────── -->
+    <!-- ── Order form ─────────────────────────────────────── -->
     <section>
       <div class="container">
         <div class="order-page">
 
-          <!-- Formulaire principal -->
+          <!-- Main form -->
           <form id="order-form"
                 action="https://formspree.io/f/xeepqadr"
                 method="POST"
                 novalidate>
 
-            <!-- ─ Étape 1 : Catégorie ───────────────────── -->
+            <!-- Step 1: Category selection -->
             <fieldset class="form-section">
               <legend>Que souhaitez-vous commander ?</legend>
               <div class="radio-cards">
@@ -58,7 +62,6 @@
                   <input type="radio" name="categorie" value="couture" required>
                   <div class="radio-card-inner">
                     <span class="radio-card-icon" aria-hidden="true">
-                      <!-- Icône tissu (SVG inline) -->
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
                         <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                         <line x1="3" y1="6" x2="21" y2="6"/>
@@ -73,7 +76,6 @@
                   <input type="radio" name="categorie" value="bijoux" required>
                   <div class="radio-card-inner">
                     <span class="radio-card-icon" aria-hidden="true">
-                      <!-- Icône bijou (SVG inline) -->
                       <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
                         <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
                       </svg>
@@ -85,13 +87,13 @@
               </div>
             </fieldset>
 
-            <!-- ─ Section Couture ──────────────────────── -->
+            <!-- Couture section -->
             <div id="section-couture" hidden>
               <fieldset class="form-section">
                 <legend>Vos articles</legend>
                 <p class="form-hint">Cochez les articles souhaités et ajustez les quantités.</p>
                 <div id="articles-selector" class="articles-list">
-                  <!-- Rempli par order-form.js -->
+                  <!-- Populated by order-form.js -->
                 </div>
               </fieldset>
 
@@ -106,7 +108,7 @@
               </fieldset>
             </div>
 
-            <!-- ─ Section Bijoux ───────────────────────── -->
+            <!-- Bijoux section -->
             <div id="section-bijoux" hidden>
               <fieldset class="form-section">
                 <legend>Votre bijou</legend>
@@ -134,7 +136,7 @@
                   <label>Thème de couleur des perles</label>
                   <p class="form-hint">Sélectionnez une ou plusieurs couleurs.</p>
                   <div id="couleurs-chips" class="color-chips">
-                    <!-- Rempli par order-form.js -->
+                    <!-- Populated by order-form.js -->
                   </div>
                 </div>
 
@@ -164,7 +166,7 @@
               </fieldset>
             </div>
 
-            <!-- ─ Coordonnées ─────────────────────────── -->
+            <!-- Contact details -->
             <fieldset class="form-section">
               <legend>Vos coordonnées</legend>
 
@@ -223,7 +225,7 @@
               </div>
             </fieldset>
 
-            <!-- ─ Récapitulatif prix ───────────────────── -->
+            <!-- Price summary -->
             <div id="price-summary" class="price-summary" hidden>
               <div class="price-summary-row">
                 <span id="price-count" class="price-count"></span>
@@ -243,7 +245,7 @@
 
           </form>
 
-          <!-- Message de confirmation (affiché après envoi) -->
+          <!-- Success confirmation (shown after Formspree submission) -->
           <div id="form-confirmation" hidden>
             <div class="confirmation-card">
               <span class="confirmation-icon" aria-hidden="true">✓</span>
@@ -262,36 +264,11 @@
 
   </main>
 
-  <!-- ── Pied de page ───────────────────────────────────── -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <a href="index.html" class="footer-logo-link">
-            <img src="images/welcome/logo.avif" alt="Assa Créations" class="footer-logo-img">
-          </a>
-          <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
-        </div>
-        <nav class="footer-nav" aria-label="Navigation pied de page">
-          <h3>Pages</h3>
-          <a href="couture.html">Couture</a>
-          <a href="bijoux.html">Bijoux</a>
-          <a href="commander.html">Commander</a>
-          <a href="a-propos.html">À propos</a>
-        </nav>
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <a href="mailto:contact@assacreation.com">contact@assacreation.com</a>
-        </div>
-      </div>
-      <p class="footer-copy">&copy; <span id="year"></span> Assa Créations</p>
-    </div>
-  </footer>
+  <!-- ── Footer (injected by components.js) ───────────── -->
+  <footer class="site-footer" id="site-footer"></footer>
 
+  <script type="module" src="js/components.js"></script>
   <script type="module" src="js/order-form.js"></script>
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-  </script>
 
 </body>
 </html>

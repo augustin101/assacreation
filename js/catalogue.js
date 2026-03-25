@@ -1,18 +1,19 @@
-// catalogue.js — Rendu des grilles produits et galerie tissus
+// catalogue.js — Product grid and fabric gallery rendering
 
 async function fetchJSON(url) {
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`Erreur lors du chargement : ${url}`);
+  if (!res.ok) throw new Error(`Failed to load: ${url}`);
   return res.json();
 }
 
-// ── Cartes produits ──────────────────────────────────────
+// ── Product cards ─────────────────────────────────────
 
 function priceHtml(price) {
   if (!price || price <= 0) return '';
   return `<span class="price">${price.toLocaleString('fr-FR', { minimumFractionDigits: 0 })}&nbsp;€</span>`;
 }
 
+// Make a product card open the lightbox when clicked or activated by keyboard
 function makeCardClickable(article, image, alt) {
   article.classList.add('product-card--clickable');
   article.setAttribute('role', 'button');
@@ -46,6 +47,7 @@ function createProductCard({ name, price, description, image }) {
   return article;
 }
 
+// Bijoux cards: base metal badge and price always pinned to card bottom via flex layout
 function createBijouxCard({ name, price, base, image }) {
   const baseLabel = base.map(b => b === 'or' ? 'Or' : 'Argent').join(' / ');
   const article = document.createElement('article');
@@ -69,7 +71,7 @@ function createBijouxCard({ name, price, base, image }) {
   return article;
 }
 
-// ── Galerie tissus ────────────────────────────────────────
+// ── Fabric gallery ────────────────────────────────────
 
 const DISPO_LABELS = {
   disponible: 'Disponible',
@@ -100,7 +102,7 @@ function createTissuTile({ id, image, disponibilite }) {
   return div;
 }
 
-// ── Lightbox ──────────────────────────────────────────────
+// ── Lightbox ──────────────────────────────────────────
 
 let lightboxEl = null;
 
@@ -109,7 +111,7 @@ function buildLightbox() {
   el.className = 'lightbox';
   el.setAttribute('role', 'dialog');
   el.setAttribute('aria-modal', 'true');
-  el.setAttribute('aria-label', 'Vue agrandie du tissu');
+  el.setAttribute('aria-label', 'Vue agrandie');
   el.innerHTML = `
     <div class="lightbox-backdrop"></div>
     <div class="lightbox-content">
@@ -142,7 +144,7 @@ function closeLightbox() {
   document.body.classList.remove('lightbox-active');
 }
 
-// ── Initialisations par page ──────────────────────────────
+// ── Page initialisers ─────────────────────────────────
 
 async function initCouturePage() {
   try {
@@ -161,7 +163,7 @@ async function initCouturePage() {
       tissusData.forEach(tissu => tissusGrid.appendChild(createTissuTile(tissu)));
     }
   } catch (err) {
-    console.error('Erreur chargement page couture :', err);
+    console.error('Failed to load couture page:', err);
   }
 }
 
@@ -173,11 +175,11 @@ async function initBijouxPage() {
       bijouxData.forEach(item => grid.appendChild(createBijouxCard(item)));
     }
   } catch (err) {
-    console.error('Erreur chargement page bijoux :', err);
+    console.error('Failed to load bijoux page:', err);
   }
 }
 
-// ── Démarrage ─────────────────────────────────────────────
+// ── Bootstrap ─────────────────────────────────────────
 
 const currentPage = location.pathname.split('/').pop() || 'index.html';
 if (currentPage === 'couture.html') initCouturePage();

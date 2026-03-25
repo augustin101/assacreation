@@ -1,4 +1,4 @@
-// order-form.js — Formulaire de commande dynamique
+// order-form.js — Dynamic order form (category toggle, article selector, fabric picker)
 
 let tissusData = [];
 let bijouxData = [];
@@ -8,11 +8,11 @@ const MAX_TOTAL       = 10;
 
 async function fetchJSON(url) {
   const res = await fetch(url);
-  if (!res.ok) throw new Error(`Erreur chargement : ${url}`);
+  if (!res.ok) throw new Error(`Failed to load: ${url}`);
   return res.json();
 }
 
-// ── Couleurs bijoux ───────────────────────────────────────
+// ── Bead colour options ───────────────────────────────
 
 const COULEURS = [
   { value: 'beige-dore',  label: 'Beige doré',  hex: '#D4B896' },
@@ -26,7 +26,7 @@ const COULEURS = [
   { value: 'jaune-dore',  label: 'Jaune doré',  hex: '#D4A020' },
 ];
 
-// ── Totaux quantités ──────────────────────────────────────
+// ── Quantity helpers ──────────────────────────────────
 
 function getTotalQty() {
   let total = 0;
@@ -37,6 +37,7 @@ function getTotalQty() {
   return total;
 }
 
+// Disable +/- buttons that would exceed per-article (5) or global (10) limits
 function updateQtyControls() {
   const total = getTotalQty();
   document.querySelectorAll('#articles-selector .article-row').forEach(row => {
@@ -51,8 +52,9 @@ function updateQtyControls() {
   });
 }
 
-// ── Sélecteur de tissu mini (par pièce) ──────────────────
+// ── Per-piece fabric picker ───────────────────────────
 
+// Builds a single mini fabric picker (2-column scrollable radio grid) for one piece
 function buildFabricPick(articleId, pieceIndex) {
   const wrap = document.createElement('div');
   wrap.className = 'fabric-pick';
@@ -84,6 +86,7 @@ function buildFabricPick(articleId, pieceIndex) {
   return wrap;
 }
 
+// Rebuild the fabric picker strip under an article row for the given quantity
 function rebuildFabricStrip(row, articleId, qty) {
   const existing = row.querySelector('.article-fabric-strip');
   if (existing) existing.remove();
@@ -97,7 +100,7 @@ function rebuildFabricStrip(row, articleId, qty) {
   row.appendChild(strip);
 }
 
-// ── Articles couture ──────────────────────────────────────
+// ── Article checklist ─────────────────────────────────
 
 function renderArticlesSelector(couture) {
   const container = document.getElementById('articles-selector');
@@ -155,7 +158,7 @@ function renderArticlesSelector(couture) {
   });
 }
 
-// ── Dropdown modèles bijoux ───────────────────────────────
+// ── Bijoux model dropdown ─────────────────────────────
 
 function populateBijouxSelect(bijoux) {
   const select = document.getElementById('modele-bijou');
@@ -174,7 +177,7 @@ function populateBijouxSelect(bijoux) {
   select.addEventListener('change', updatePriceSummary);
 }
 
-// ── Pastilles couleurs ────────────────────────────────────
+// ── Colour chip checkboxes ────────────────────────────
 
 function renderColorChips() {
   const container = document.getElementById('couleurs-chips');
@@ -191,7 +194,7 @@ function renderColorChips() {
   });
 }
 
-// ── Récapitulatif prix ────────────────────────────────────
+// ── Live price summary ────────────────────────────────
 
 function updatePriceSummary() {
   const summaryEl = document.getElementById('price-summary');
@@ -233,7 +236,7 @@ function updatePriceSummary() {
   }
 }
 
-// ── Toggle couture / bijoux ───────────────────────────────
+// ── Category toggle (couture / bijoux) ────────────────
 
 function setupCategoryToggle() {
   const radios         = document.querySelectorAll('input[name="categorie"]');
@@ -257,7 +260,7 @@ function setupCategoryToggle() {
   });
 }
 
-// ── Soumission Formspree ──────────────────────────────────
+// ── Formspree submission ──────────────────────────────
 
 function setupFormSubmit() {
   const form         = document.getElementById('order-form');
@@ -267,6 +270,7 @@ function setupFormSubmit() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
+    // Require at least one article checked for couture orders
     const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
     if (categorie === 'couture') {
       const checked = document.querySelectorAll('#articles-selector input[type="checkbox"]:checked');
@@ -305,17 +309,9 @@ function setupFormSubmit() {
   });
 }
 
-// ── Nav active ────────────────────────────────────────────
-
-function setActiveNav() {
-  const page = location.pathname.split('/').pop() || 'index.html';
-  document.querySelector(`.site-nav a[href="${page}"]`)?.classList.add('active');
-}
-
-// ── Initialisation ────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────
 
 async function init() {
-  setActiveNav();
   try {
     const [coutureData, tissus, bijoux] = await Promise.all([
       fetchJSON('data/couture.json'),
@@ -331,7 +327,7 @@ async function init() {
     setupCategoryToggle();
     setupFormSubmit();
   } catch (err) {
-    console.error('Erreur initialisation formulaire :', err);
+    console.error('Failed to initialise order form:', err);
   }
 }
 

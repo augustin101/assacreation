@@ -8,10 +8,13 @@
   <link rel="stylesheet" href="css/reset.css">
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
 </head>
 <body>
 
-  <!-- ── En-tête ───────────────────────────────────────── -->
+  <!-- ── Header ───────────────────────────────────────── -->
   <header class="site-header" id="site-header">
     <div class="container">
       <a href="index.html" class="logo">Assa Créations</a>
@@ -31,7 +34,7 @@
 
   <main>
 
-    <!-- ── Hero page ─────────────────────────────────────── -->
+    <!-- ── Page hero ─────────────────────────────────────── -->
     <section class="page-hero">
       <div class="container">
         <h1>À propos</h1>
@@ -39,7 +42,7 @@
       </div>
     </section>
 
-    <!-- ── Contenu ────────────────────────────────────────── -->
+    <!-- ── About content ──────────────────────────────────── -->
     <section>
       <div class="container">
         <div class="about-grid">
@@ -51,7 +54,7 @@
             <p>
               <i>J'ai hérité du prénom baoulé Assa. Assa signifie la terre fertile,
               belle signification.
-              </i>  
+              </i>
             </p>
             <p>
               À travers ce site, je vous présente ce que le terreau de ma créativité a fait
@@ -84,37 +87,10 @@
 
   </main>
 
-  <!-- ── Pied de page ───────────────────────────────────── -->
-  <footer class="site-footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <a href="index.html" class="footer-logo-link">
-            <img src="images/welcome/logo.avif" alt="Assa Créations" class="footer-logo-img">
-          </a>
-          <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
-        </div>
-        <nav class="footer-nav" aria-label="Navigation pied de page">
-          <h3>Pages</h3>
-          <a href="couture.html">Couture</a>
-          <a href="bijoux.html">Bijoux</a>
-          <a href="commander.html">Commander</a>
-          <a href="a-propos.html">À propos</a>
-        </nav>
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <a href="mailto:contact@assacreation.com">contact@assacreation.com</a>
-        </div>
-      </div>
-      <p class="footer-copy">&copy; <span id="year"></span> Assa Créations</p>
-    </div>
-  </footer>
+  <!-- ── Footer (injected by components.js) ───────────── -->
+  <footer class="site-footer" id="site-footer"></footer>
 
-  <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
-    const page = location.pathname.split('/').pop() || 'index.html';
-    document.querySelector(`.site-nav a[href="${page}"]`)?.classList.add('active');
-  </script>
+  <script type="module" src="js/components.js"></script>
 
 </body>
 </html>
