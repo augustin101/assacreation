@@ -1,6 +1,10 @@
 // order-form.js — Formulaire de commande dynamique
 
+let tissusData = [];
 let bijouxData = [];
+
+const MAX_PER_ARTICLE = 5;
+const MAX_TOTAL       = 10;
 
 async function fetchJSON(url) {
   const res = await fetch(url);
@@ -22,7 +26,78 @@ const COULEURS = [
   { value: 'jaune-dore',  label: 'Jaune doré',  hex: '#D4A020' },
 ];
 
-// ── Articles couture (checkboxes + quantités) ─────────────
+// ── Totaux quantités ──────────────────────────────────────
+
+function getTotalQty() {
+  let total = 0;
+  document.querySelectorAll('#articles-selector .article-row').forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    if (cb?.checked) total += parseInt(row.querySelector('.qty-input')?.value || 0, 10);
+  });
+  return total;
+}
+
+function updateQtyControls() {
+  const total = getTotalQty();
+  document.querySelectorAll('#articles-selector .article-row').forEach(row => {
+    const cb      = row.querySelector('input[type="checkbox"]');
+    const plusBtn = row.querySelector('.qty-plus');
+    const minusBtn = row.querySelector('.qty-minus');
+    const qtyIn   = row.querySelector('.qty-input');
+    if (!plusBtn || !qtyIn) return;
+    const qty = parseInt(qtyIn.value, 10);
+    plusBtn.disabled  = !cb?.checked || total >= MAX_TOTAL || qty >= MAX_PER_ARTICLE;
+    minusBtn.disabled = !cb?.checked || qty <= 1;
+  });
+}
+
+// ── Sélecteur de tissu mini (par pièce) ──────────────────
+
+function buildFabricPick(articleId, pieceIndex) {
+  const wrap = document.createElement('div');
+  wrap.className = 'fabric-pick';
+
+  const lbl = document.createElement('span');
+  lbl.className = 'fabric-pick-label';
+  lbl.textContent = `Pièce ${pieceIndex}`;
+  wrap.appendChild(lbl);
+
+  const scroll = document.createElement('div');
+  scroll.className = 'fabric-pick-scroll';
+
+  tissusData.forEach(({ id, image, disponibilite }) => {
+    const epuise = disponibilite === 'épuisé';
+    const tile = document.createElement('label');
+    tile.className = `fabric-pick-tile${epuise ? ' is-epuise' : ''}`;
+    tile.title = `Tissu n°${id}`;
+    tile.innerHTML = `
+      <input type="radio" name="tissu_${articleId}_${pieceIndex}" value="${id}" ${epuise ? 'disabled' : ''}>
+      <div class="fabric-pick-tile-img">
+        <img src="${image}" alt="Tissu ${id}" loading="lazy">
+        <div class="fabric-pick-tile-check">✓</div>
+      </div>
+    `;
+    scroll.appendChild(tile);
+  });
+
+  wrap.appendChild(scroll);
+  return wrap;
+}
+
+function rebuildFabricStrip(row, articleId, qty) {
+  const existing = row.querySelector('.article-fabric-strip');
+  if (existing) existing.remove();
+  if (qty < 1) return;
+
+  const strip = document.createElement('div');
+  strip.className = 'article-fabric-strip';
+  for (let i = 1; i <= qty; i++) {
+    strip.appendChild(buildFabricPick(articleId, i));
+  }
+  row.appendChild(strip);
+}
+
+// ── Articles couture ──────────────────────────────────────
 
 function renderArticlesSelector(couture) {
   const container = document.getElementById('articles-selector');
@@ -31,7 +106,10 @@ function renderArticlesSelector(couture) {
   couture.forEach(({ id, name, price }) => {
     const row = document.createElement('div');
     row.className = 'article-row';
-    row.innerHTML = `
+
+    const header = document.createElement('div');
+    header.className = 'article-header';
+    header.innerHTML = `
       <label class="article-check">
         <input type="checkbox" name="articles" value="${id}" data-price="${price}" data-name="${name}">
         <span class="article-name">${name}</span>
@@ -39,85 +117,41 @@ function renderArticlesSelector(couture) {
       </label>
       <div class="article-qty" hidden>
         <button type="button" class="qty-btn qty-minus" aria-label="Diminuer la quantité">−</button>
-        <input type="number" name="qty_${id}" value="1" min="1" max="10" class="qty-input" aria-label="Quantité">
+        <input type="number" name="qty_${id}" value="1" min="1" max="${MAX_PER_ARTICLE}" class="qty-input" aria-label="Quantité" readonly>
         <button type="button" class="qty-btn qty-plus" aria-label="Augmenter la quantité">+</button>
       </div>
     `;
+    row.appendChild(header);
 
-    const cb      = row.querySelector('input[type="checkbox"]');
-    const qtyDiv  = row.querySelector('.article-qty');
-    const qtyIn   = row.querySelector('.qty-input');
-    const minusBtn = row.querySelector('.qty-minus');
-    const plusBtn  = row.querySelector('.qty-plus');
+    const cb       = header.querySelector('input[type="checkbox"]');
+    const qtyDiv   = header.querySelector('.article-qty');
+    const qtyIn    = header.querySelector('.qty-input');
+    const minusBtn = header.querySelector('.qty-minus');
+    const plusBtn  = header.querySelector('.qty-plus');
 
     cb.addEventListener('change', () => {
       qtyDiv.hidden = !cb.checked;
+      rebuildFabricStrip(row, id, cb.checked ? parseInt(qtyIn.value, 10) : 0);
+      updateQtyControls();
       updatePriceSummary();
     });
-    qtyIn.addEventListener('input', updatePriceSummary);
-    minusBtn.addEventListener('click', () => {
-      if (+qtyIn.value > 1) { qtyIn.value = +qtyIn.value - 1; updatePriceSummary(); }
-    });
-    plusBtn.addEventListener('click', () => {
-      if (+qtyIn.value < 10) { qtyIn.value = +qtyIn.value + 1; updatePriceSummary(); }
-    });
+
+    function changeQty(delta) {
+      const current = parseInt(qtyIn.value, 10);
+      const totalWithoutThis = getTotalQty() - current;
+      const maxAllowed = Math.min(MAX_PER_ARTICLE, MAX_TOTAL - totalWithoutThis);
+      const newQty = Math.max(1, Math.min(maxAllowed, current + delta));
+      if (newQty === current) return;
+      qtyIn.value = newQty;
+      rebuildFabricStrip(row, id, newQty);
+      updateQtyControls();
+      updatePriceSummary();
+    }
+
+    minusBtn.addEventListener('click', () => changeQty(-1));
+    plusBtn.addEventListener('click',  () => changeQty(+1));
 
     container.appendChild(row);
-  });
-}
-
-// ── Sélecteur de tissus (radio — un seul tissu) ───────────
-
-function renderTissusSelector(tissus, containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-
-  // Nom du groupe radio = id du container pour isolation
-  const radioName = containerId;
-
-  tissus.forEach(({ id, image, disponibilite }) => {
-    const epuise = disponibilite === 'épuisé';
-    const label = document.createElement('label');
-    label.className = `tissu-select-label${epuise ? ' is-epuise' : ''}`;
-
-    const badgeHtml = disponibilite !== 'disponible'
-      ? `<span class="badge badge-${disponibilite}" style="font-size:0.65rem;padding:1px 6px">
-           ${disponibilite === 'limité' ? 'Limité' : 'Épuisé'}
-         </span>`
-      : '';
-
-    label.innerHTML = `
-      <input type="radio" name="${radioName}" value="${id}" ${epuise ? 'disabled' : ''}>
-      <div class="tissu-select-inner">
-        <div class="tissu-select-img">
-          <img src="${image}" alt="Tissu n°${id}" loading="lazy">
-          <div class="tissu-select-checkmark">✓</div>
-        </div>
-        <div class="tissu-select-footer">
-          <span class="tissu-select-num">#${id}</span>
-          ${badgeHtml}
-        </div>
-      </div>
-    `;
-    container.appendChild(label);
-  });
-}
-
-// ── Pastilles couleurs bijoux ─────────────────────────────
-
-function renderColorChips() {
-  const container = document.getElementById('couleurs-chips');
-  if (!container) return;
-
-  COULEURS.forEach(({ value, label, hex }) => {
-    const chipLabel = document.createElement('label');
-    chipLabel.className = 'color-chip';
-    chipLabel.innerHTML = `
-      <input type="checkbox" name="couleurs" value="${value}">
-      <span class="color-dot" style="background-color:${hex}"></span>
-      ${label}
-    `;
-    container.appendChild(chipLabel);
   });
 }
 
@@ -140,14 +174,33 @@ function populateBijouxSelect(bijoux) {
   select.addEventListener('change', updatePriceSummary);
 }
 
+// ── Pastilles couleurs ────────────────────────────────────
+
+function renderColorChips() {
+  const container = document.getElementById('couleurs-chips');
+  if (!container) return;
+  COULEURS.forEach(({ value, label, hex }) => {
+    const chipLabel = document.createElement('label');
+    chipLabel.className = 'color-chip';
+    chipLabel.innerHTML = `
+      <input type="checkbox" name="couleurs" value="${value}">
+      <span class="color-dot" style="background-color:${hex}"></span>
+      ${label}
+    `;
+    container.appendChild(chipLabel);
+  });
+}
+
 // ── Récapitulatif prix ────────────────────────────────────
 
 function updatePriceSummary() {
   const summaryEl = document.getElementById('price-summary');
   const totalEl   = document.getElementById('price-total');
+  const countEl   = document.getElementById('price-count');
   if (!summaryEl || !totalEl) return;
 
   let total    = 0;
+  let totalQty = 0;
   let hasPrice = false;
 
   const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
@@ -156,12 +209,20 @@ function updatePriceSummary() {
     document.querySelectorAll('#articles-selector input[type="checkbox"]:checked').forEach(cb => {
       const price = parseFloat(cb.dataset.price) || 0;
       const qty   = parseInt(document.querySelector(`input[name="qty_${cb.value}"]`)?.value || 1, 10);
+      totalQty += qty;
       if (price > 0) { total += price * qty; hasPrice = true; }
     });
+    if (countEl) {
+      const remaining = MAX_TOTAL - totalQty;
+      countEl.textContent = totalQty > 0
+        ? `${totalQty} article${totalQty > 1 ? 's' : ''} — ${remaining} restant${remaining > 1 ? 's' : ''} (max ${MAX_TOTAL})`
+        : '';
+    }
   } else if (categorie === 'bijoux') {
     const modelId = document.getElementById('modele-bijou')?.value;
     const item    = bijouxData.find(b => b.id === modelId);
     if (item?.price > 0) { total = item.price; hasPrice = true; }
+    if (countEl) countEl.textContent = '';
   }
 
   if (hasPrice && total > 0) {
@@ -175,9 +236,9 @@ function updatePriceSummary() {
 // ── Toggle couture / bijoux ───────────────────────────────
 
 function setupCategoryToggle() {
-  const radios          = document.querySelectorAll('input[name="categorie"]');
-  const sectionCouture  = document.getElementById('section-couture');
-  const sectionBijoux   = document.getElementById('section-bijoux');
+  const radios         = document.querySelectorAll('input[name="categorie"]');
+  const sectionCouture = document.getElementById('section-couture');
+  const sectionBijoux  = document.getElementById('section-bijoux');
   if (!sectionCouture || !sectionBijoux) return;
 
   function applyRequired(section, enable) {
@@ -206,7 +267,6 @@ function setupFormSubmit() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    // Validation : au moins un article coché pour la couture
     const categorie = document.querySelector('input[name="categorie"]:checked')?.value;
     if (categorie === 'couture') {
       const checked = document.querySelectorAll('#articles-selector input[type="checkbox"]:checked');
@@ -227,15 +287,13 @@ function setupFormSubmit() {
         body:    new FormData(form),
         headers: { Accept: 'application/json' },
       });
-
       if (res.ok) {
         form.hidden         = true;
         confirmation.hidden = false;
         confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
       } else {
         const data = await res.json().catch(() => ({}));
-        const msg  = data?.errors?.map(e => e.message).join(', ') || 'Une erreur est survenue.';
-        alert(msg);
+        alert(data?.errors?.map(e => e.message).join(', ') || 'Une erreur est survenue.');
         btn.disabled    = false;
         btn.textContent = originalText;
       }
@@ -258,20 +316,17 @@ function setActiveNav() {
 
 async function init() {
   setActiveNav();
-
   try {
-    const [coutureData, tissusData, bijoux] = await Promise.all([
+    const [coutureData, tissus, bijoux] = await Promise.all([
       fetchJSON('data/couture.json'),
       fetchJSON('data/tissus.json'),
       fetchJSON('data/bijoux.json'),
     ]);
-
+    tissusData = tissus;
     bijouxData = bijoux;
 
     renderArticlesSelector(coutureData);
     populateBijouxSelect(bijoux);
-    renderTissusSelector(tissusData, 'tissus-selector');
-    renderTissusSelector(tissusData, 'doublure-selector');
     renderColorChips();
     setupCategoryToggle();
     setupFormSubmit();

@@ -96,22 +96,6 @@
               </fieldset>
 
               <fieldset class="form-section">
-                <legend>Tissu principal</legend>
-                <p class="form-hint">Un seul tissu par article. Si vos articles nécessitent des tissus différents, précisez-le dans les remarques.</p>
-                <div class="tissus-scroll-wrap">
-                  <div id="tissus-selector" class="tissus-selector-grid"></div>
-                </div>
-              </fieldset>
-
-              <fieldset class="form-section">
-                <legend>Tissu de doublure <span class="legend-optional">(optionnel)</span></legend>
-                <p class="form-hint">Si vous souhaitez une doublure dans un tissu différent.</p>
-                <div class="tissus-scroll-wrap">
-                  <div id="doublure-selector" class="tissus-selector-grid"></div>
-                </div>
-              </fieldset>
-
-              <fieldset class="form-section">
                 <legend>Précisions</legend>
                 <textarea
                   id="precisions-couture"
@@ -242,10 +226,10 @@
             <!-- ─ Récapitulatif prix ───────────────────── -->
             <div id="price-summary" class="price-summary" hidden>
               <div class="price-summary-row">
-                <span>Estimation :</span>
+                <span id="price-count" class="price-count"></span>
                 <span id="price-total" class="price-total-amount"></span>
               </div>
-              <p class="form-hint" style="margin-top:var(--space-2)">Prix indicatifs — le tarif final sera confirmé par Assa.</p>
+              <p class="form-hint" style="margin-top:var(--space-2)">Prix indicatifs — ne prend pas en compte les frais de livraison.</p>
             </div>
 
             <div class="form-submit">
@@ -283,7 +267,9 @@
     <div class="container">
       <div class="footer-inner">
         <div class="footer-brand">
-          <a href="index.html" class="logo">Assa Créations</a>
+          <a href="index.html" class="footer-logo-link">
+            <img src="images/welcome/logo.avif" alt="Assa Créations" class="footer-logo-img">
+          </a>
           <p>Créations textiles &amp; bijoux faits main, avec amour.</p>
         </div>
         <nav class="footer-nav" aria-label="Navigation pied de page">

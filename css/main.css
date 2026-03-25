@@ -394,15 +394,18 @@ section {
 .hero-img {
   border-radius: var(--radius-xl);
   overflow: hidden;
-  aspect-ratio: 4/5;
   background-color: var(--color-surface-2);
   box-shadow: var(--shadow-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-10);
 }
 
 .hero-img img {
   width: 100%;
-  height: 100%;
-  object-fit: cover;
+  height: auto;
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {
@@ -412,8 +415,8 @@ section {
   }
 
   .hero-img {
-    aspect-ratio: 16/9;
     order: -1;
+    padding: var(--space-6);
   }
 }
 
@@ -1030,8 +1033,7 @@ select {
 
 .article-row {
   display: flex;
-  align-items: center;
-  gap: var(--space-4);
+  flex-direction: column;
   padding: var(--space-3) var(--space-4);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
@@ -1105,7 +1107,7 @@ select {
 }
 
 .qty-input {
-  width: 38px;
+  width: 36px;
   text-align: center;
   padding: var(--space-1) var(--space-2);
   border: 1px solid var(--color-border);
@@ -1113,6 +1115,15 @@ select {
   font-size: var(--text-sm);
   background-color: var(--color-bg);
   color: var(--color-text);
+  /* Supprime les flèches du champ numérique */
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+.qty-input::-webkit-outer-spin-button,
+.qty-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 
 /* ── Galerie tissus scrollable ────────────────────────── */
@@ -1139,6 +1150,144 @@ select {
 .tissus-scroll-wrap::-webkit-scrollbar-thumb {
   background-color: var(--color-border);
   border-radius: 3px;
+}
+
+/* ── Sélecteur de tissu par pièce (fabric pick) ─────── */
+
+.article-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+}
+
+.article-fabric-strip {
+  display: flex;
+  gap: var(--space-3);
+  padding-top: var(--space-3);
+  padding-left: calc(17px + var(--space-3)); /* align with article name */
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.article-fabric-strip::-webkit-scrollbar {
+  height: 4px;
+}
+.article-fabric-strip::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 2px;
+}
+
+.fabric-pick {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+.fabric-pick-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.fabric-pick-scroll {
+  width: 112px;
+  height: 128px;
+  overflow-y: auto;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: var(--space-2);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  background-color: var(--color-bg);
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-border) transparent;
+}
+
+.fabric-pick-scroll::-webkit-scrollbar { width: 4px; }
+.fabric-pick-scroll::-webkit-scrollbar-thumb {
+  background-color: var(--color-border);
+  border-radius: 2px;
+}
+
+.fabric-pick-tile {
+  cursor: pointer;
+  display: block;
+}
+
+.fabric-pick-tile.is-epuise {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.fabric-pick-tile input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.fabric-pick-tile-img {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 3px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  transition: border-color var(--transition);
+}
+
+.fabric-pick-tile:has(input:checked) .fabric-pick-tile-img {
+  border-color: var(--color-terracotta);
+}
+
+.fabric-pick-tile-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fabric-pick-tile-check {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(181, 98, 61, 0.55);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.fabric-pick-tile:has(input:checked) .fabric-pick-tile-check {
+  opacity: 1;
+}
+
+/* ── Logo pied de page ───────────────────────────────── */
+
+.footer-logo-link {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+}
+
+.footer-logo-img {
+  height: 48px;
+  width: auto;
+  display: block;
+}
+
+/* ── Compteur dans le récapitulatif ─────────────────── */
+
+.price-count {
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
 }
 
 /* ── Récapitulatif prix ───────────────────────────────── */
