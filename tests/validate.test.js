@@ -1,11 +1,11 @@
 // tests/validate.test.js — Unit tests for js/validate.js
 
-import { describe, test, expect, beforeAll, afterAll } from 'vitest';
+import { describe, test, expect, beforeAll, afterAll, vi } from 'vitest';
 import { validateCouture, validateTissus, validateBijoux } from '../js/validate.js';
 
 // Suppress expected [Assa] warnings produced by intentionally invalid test data
 beforeAll(() => vi.spyOn(console, 'warn').mockImplementation(() => {}));
-afterAll(() => console.warn.mockRestore());
+afterAll(() => vi.mocked(console.warn).mockRestore());
 
 // ── validateCouture ───────────────────────────────────────────
 

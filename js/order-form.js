@@ -561,6 +561,12 @@ function setupCategoryToggle() {
       const isCouture       = radio.value === 'couture';
       sectionCouture.hidden = !isCouture;
       sectionBijoux.hidden  = isCouture;
+
+      // Disable fieldsets in the inactive section so their inputs are excluded from FormData.
+      // Using fieldset.disabled preserves each input's own disabled state within the active section.
+      sectionCouture.querySelectorAll('fieldset').forEach(fs => { fs.disabled = !isCouture; });
+      sectionBijoux.querySelectorAll('fieldset').forEach(fs => { fs.disabled = isCouture; });
+
       // Populate the readable hidden field submitted to Formspree
       const catHidden = document.getElementById('cat-hidden');
       if (catHidden) catHidden.value = isCouture ? 'Couture' : 'Bijoux';
