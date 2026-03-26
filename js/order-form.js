@@ -1,5 +1,7 @@
 // order-form.js — Dynamic order form (couture article selector + bijoux item picker)
 
+import { validateCouture, validateTissus, validateBijoux } from './validate.js';
+
 let tissusData = [];
 let bijouxData = [];
 
@@ -670,13 +672,14 @@ function setupFormSubmit() {
 
 async function init() {
   try {
-    const [coutureData, tissus, bijoux] = await Promise.all([
+    const [rawCouture, rawTissus, rawBijoux] = await Promise.all([
       fetchJSON('data/couture.json'),
       fetchJSON('data/tissus.json'),
       fetchJSON('data/bijoux.json'),
     ]);
-    tissusData = tissus;
-    bijouxData = bijoux;
+    const coutureData = validateCouture(rawCouture);
+    tissusData        = validateTissus(rawTissus);
+    bijouxData        = validateBijoux(rawBijoux);
 
     renderArticlesSelector(coutureData);
     setupCategoryToggle();

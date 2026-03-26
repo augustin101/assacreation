@@ -1,5 +1,7 @@
 // catalogue.js — Product grid and fabric gallery rendering
 
+import { validateCouture, validateTissus, validateBijoux } from './validate.js';
+
 async function fetchJSON(url) {
   const res = await fetch(url);
   if (!res.ok) throw new Error(`Failed to load: ${url}`);
@@ -148,10 +150,13 @@ function closeLightbox() {
 
 async function initCouturePage() {
   try {
-    const [coutureData, tissusData] = await Promise.all([
+    const [rawCouture, rawTissus] = await Promise.all([
       fetchJSON('data/couture.json'),
       fetchJSON('data/tissus.json'),
     ]);
+
+    const coutureData = validateCouture(rawCouture);
+    const tissusData  = validateTissus(rawTissus);
 
     const coutureGrid = document.getElementById('couture-grid');
     if (coutureGrid) {
@@ -169,7 +174,8 @@ async function initCouturePage() {
 
 async function initBijouxPage() {
   try {
-    const bijouxData = await fetchJSON('data/bijoux.json');
+    const rawBijoux = await fetchJSON('data/bijoux.json');
+    const bijouxData = validateBijoux(rawBijoux);
     const grid = document.getElementById('bijoux-grid');
     if (grid) {
       bijouxData.forEach(item => grid.appendChild(createBijouxCard(item)));
