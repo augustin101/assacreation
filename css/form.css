@@ -94,6 +94,23 @@
   .form-row {
     grid-template-columns: 1fr;
   }
+
+  .form-section {
+    padding: var(--space-5);
+  }
+
+  .form-section > legend {
+    font-size: var(--text-base);
+  }
+
+  .radio-card-inner {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  .fabric-modal-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    grid-auto-rows: 180px;
+  }
 }
 
 /* ── Text inputs, selects, textareas ─────────────────── */

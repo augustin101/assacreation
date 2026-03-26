@@ -84,6 +84,20 @@
   }
 }
 
+@media (max-width: 640px) {
+  .page-hero {
+    padding-block: var(--space-10) var(--space-6);
+  }
+
+  .page-hero p {
+    font-size: var(--text-base);
+  }
+
+  .hero-text p {
+    font-size: var(--text-base);
+  }
+}
+
 /* ── Homepage categories ─────────────────────────────── */
 
 .categories {

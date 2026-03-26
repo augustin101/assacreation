@@ -347,3 +347,14 @@
 body.lightbox-active {
   overflow: hidden;
 }
+
+@media (max-width: 640px) {
+  .tissus-section {
+    padding: var(--space-5);
+    margin-top: var(--space-8);
+  }
+
+  .section-header h2 {
+    font-size: var(--text-2xl);
+  }
+}

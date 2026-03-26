@@ -3,7 +3,7 @@
 let tissusData = [];
 let bijouxData = [];
 
-const MAX_PER_ARTICLE = 5;
+const MAX_PER_ARTICLE = 3;
 const MAX_TOTAL       = 5; // shared limit across couture + bijoux
 
 // ── Fabric availability labels ────────────────────────
@@ -39,6 +39,9 @@ function updateOrderCounter() {
   const total = getTotalQty();
   el.querySelector('.counter-value').textContent = total;
   el.classList.toggle('is-at-limit', total >= MAX_TOTAL);
+
+  const qtyHidden = document.getElementById('qty-hidden');
+  if (qtyHidden) qtyHidden.value = total;
 }
 
 // ── Quantity controls (couture) ───────────────────────
@@ -529,11 +532,15 @@ function updatePriceSummary() {
     if (price > 0) { total += price; hasPrice = true; }
   });
 
+  const priceHidden = document.getElementById('price-hidden');
   if (hasPrice && total > 0) {
-    summaryEl.hidden = false;
-    totalEl.textContent = total.toLocaleString('fr-FR', { minimumFractionDigits: 0 }) + ' €';
+    const formatted = total.toLocaleString('fr-FR', { minimumFractionDigits: 0 }) + ' €';
+    summaryEl.hidden    = false;
+    totalEl.textContent = formatted;
+    if (priceHidden) priceHidden.value = formatted;
   } else {
     summaryEl.hidden = true;
+    if (priceHidden) priceHidden.value = '—';
   }
 
   updateOrderCounter();
