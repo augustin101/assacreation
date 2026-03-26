@@ -1,4 +1,21 @@
-// components.js — Shared UI: footer injection, active nav, copyright year
+// components.js — Shared UI: header/footer injection, active nav, copyright year
+
+const HEADER_HTML = `
+  <div class="container">
+    <a href="index.html" class="logo">Assa Créations</a>
+    <button class="nav-toggle" aria-label="Ouvrir le menu"
+            onclick="document.getElementById('site-header').classList.toggle('nav-open')">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="site-nav" aria-label="Navigation principale">
+      <a href="index.html">Accueil</a>
+      <a href="couture.html">Couture</a>
+      <a href="bijoux.html">Bijoux</a>
+      <a href="commander.html" class="nav-cta">Commander</a>
+      <a href="a-propos.html">À propos</a>
+    </nav>
+  </div>
+`;
 
 const FOOTER_HTML = `
   <div class="container">
@@ -25,6 +42,11 @@ const FOOTER_HTML = `
   </div>
 `;
 
+function injectHeader() {
+  const header = document.getElementById('site-header');
+  if (header) header.innerHTML = HEADER_HTML;
+}
+
 function injectFooter() {
   const footer = document.getElementById('site-footer');
   if (footer) footer.innerHTML = FOOTER_HTML;
@@ -40,6 +62,7 @@ function setCopyrightYear() {
   if (el) el.textContent = new Date().getFullYear();
 }
 
+injectHeader();
 injectFooter();
 setActiveNav();
 setCopyrightYear();
