@@ -145,17 +145,15 @@ function submitForm() {
   $('order-form').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
 }
 
-// Simulate a valid bijou row by bypassing the modal:
-// add a row then programmatically set the hidden model + metal inputs.
+// Simulate a valid bijou row by clicking through the actual picker modal.
+// Uses 'bracelet' (base: ['or'], price: 8) so metal is auto-set and no
+// radio interaction is needed.
 function addValidBijouRow() {
   $('add-bijou-btn').click();
-  const row         = document.querySelector('.bijou-item-row');
-  const modelInput  = row.querySelector('input[name^="bijou_"]:not(.bijou-metal-hidden)');
-  const metalHidden = row.querySelector('.bijou-metal-hidden');
-  const metalGroup  = row.querySelector('.bijou-metal-group');
-  modelInput.value  = 'Collier';
-  metalHidden.value = 'Or';
-  if (metalGroup) metalGroup.hidden = true;  // simulate auto-select for single-base item
+  // Open the picker via the trigger button on the newly-added row
+  $('bijoux-items').lastElementChild.querySelector('.bijou-trigger').click();
+  // Select 'bracelet' — single-base so selectBijou auto-sets metalHidden
+  document.querySelector('[data-bijoux-id="bracelet"]').click();
 }
 
 // Simulate a valid couture article with a fabric selected.
@@ -485,6 +483,21 @@ describe('price and quantity propagation', () => {
     cb.dispatchEvent(new Event('change', { bubbles: true }));
     expect($('price-summary').hidden).toBe(true);
   });
+
+  test('price updates after a bijou is selected via the picker', () => {
+    selectCategory('bijoux');
+    addValidBijouRow(); // bracelet, price = 8
+    expect($('price-hidden').value).toMatch(/8.*€/);
+  });
+
+  test('couture prices are not counted when bijoux is active', () => {
+    // check a couture article first, then switch to bijoux
+    selectCategory('couture');
+    checkArticle('bob'); // price = 15
+    selectCategory('bijoux');
+    // no bijoux items added — price should be '—', not '15 €'
+    expect($('price-hidden').value).toBe('—');
+  });
 });
 
 // ── Form submission ───────────────────────────────────────────
@@ -526,6 +539,33 @@ describe('form submission', () => {
     await vi.waitFor(() => {
       expect($('form-confirmation').hidden).toBe(false);
       expect($('order-form').hidden).toBe(true);
+    });
+  });
+
+  test('bijoux submission does not include couture fields, _categorie, or raw _metal radios', async () => {
+    await setup();
+    // First interact with couture section so its fields exist in the DOM
+    selectCategory('couture');
+    checkArticle('bob');
+    // Then switch to bijoux
+    selectCategory('bijoux');
+    addValidBijouRow();
+    fillContact();
+    submitForm();
+    await vi.waitFor(() => {
+      const call = fetch.mock.calls.find(([url]) => url.includes('formspree'));
+      expect(call).toBeDefined();
+      const body = call[1].body;
+      // Inactive couture section fields must be absent
+      expect(body.has('articles')).toBe(false);
+      expect(body.has('qty_bob')).toBe(false);
+      // Raw internal radio fields must be stripped
+      expect(body.has('_categorie')).toBe(false);
+      // Raw _metal_N radios inside bijoux rows must be stripped
+      expect(body.has('_metal_1')).toBe(false);
+      // Human-readable fields must still be present
+      expect(body.has('Catégorie')).toBe(true);
+      expect(body.get('bijou_1')).toBe('Bracelet');
     });
   });
 

@@ -521,18 +521,24 @@ function updatePriceSummary() {
   let total    = 0;
   let hasPrice = false;
 
-  // Couture articles
-  document.querySelectorAll('#articles-selector input[type="checkbox"]:checked').forEach(cb => {
-    const price = parseFloat(cb.dataset.price) || 0;
-    const qty   = parseInt(document.querySelector(`input[name="qty_${cb.dataset.id}"]`)?.value || 1, 10);
-    if (price > 0) { total += price * qty; hasPrice = true; }
-  });
+  const activeCategory = document.querySelector('input[name="_categorie"]:checked')?.value;
 
-  // Bijoux items
-  document.querySelectorAll('.bijou-item-row').forEach(row => {
-    const price = parseFloat(row.dataset.bijouxPrice) || 0;
-    if (price > 0) { total += price; hasPrice = true; }
-  });
+  // Couture articles — only when couture is the active category
+  if (activeCategory !== 'bijoux') {
+    document.querySelectorAll('#articles-selector input[type="checkbox"]:checked').forEach(cb => {
+      const price = parseFloat(cb.dataset.price) || 0;
+      const qty   = parseInt(document.querySelector(`input[name="qty_${cb.dataset.id}"]`)?.value || 1, 10);
+      if (price > 0) { total += price * qty; hasPrice = true; }
+    });
+  }
+
+  // Bijoux items — only when bijoux is the active category
+  if (activeCategory !== 'couture') {
+    document.querySelectorAll('.bijou-item-row').forEach(row => {
+      const price = parseFloat(row.dataset.bijouxPrice) || 0;
+      if (price > 0) { total += price; hasPrice = true; }
+    });
+  }
 
   const priceHidden = document.getElementById('price-hidden');
   if (hasPrice && total > 0) {
@@ -677,10 +683,38 @@ function setupFormSubmit() {
     btn.disabled       = true;
     btn.textContent    = 'Envoi en cours…';
 
+    // Sync qty-hidden to the active section's item count before building FormData
+    const qtyHiddenEl = document.getElementById('qty-hidden');
+    if (qtyHiddenEl) {
+      let qty = 0;
+      if (categorie === 'couture') {
+        document.querySelectorAll('#articles-selector .article-row').forEach(row => {
+          const cb = row.querySelector('input[type="checkbox"]');
+          if (cb?.checked) qty += parseInt(row.querySelector('.qty-input')?.value || 0, 10);
+        });
+      } else {
+        qty = document.querySelectorAll('.bijou-item-row').length;
+      }
+      qtyHiddenEl.value = String(qty);
+    }
+
+    // Build FormData then strip fields that must not reach Formspree:
+    //   • _categorie — raw radio value; Catégorie hidden field carries the label
+    //   • entire inactive section — fieldset.disabled is not reliable across browsers
+    //   • _metal_N radios inside bijoux rows — raw values; bijou_N_metal carries the label
+    const body = new FormData(form);
+    body.delete('_categorie');
+    const inactiveId = categorie === 'couture' ? 'section-bijoux' : 'section-couture';
+    document.getElementById(inactiveId)
+      ?.querySelectorAll('[name]')
+      .forEach(el => { if (el.name) body.delete(el.name); });
+    document.querySelectorAll('.bijou-item-row input[type="radio"][name]')
+      .forEach(el => body.delete(el.name));
+
     try {
       const res = await fetch(form.action, {
         method:  'POST',
-        body:    new FormData(form),
+        body,
         headers: { Accept: 'application/json' },
       });
       if (res.ok) {
@@ -717,6 +751,13 @@ async function init() {
     renderArticlesSelector(coutureData);
     setupCategoryToggle();
     setupFormSubmit();
+
+    // Disable both section fieldsets on load so their inputs are excluded from
+    // FormData until the user explicitly selects a category.
+    document.getElementById('section-couture')
+      ?.querySelectorAll('fieldset').forEach(fs => { fs.disabled = true; });
+    document.getElementById('section-bijoux')
+      ?.querySelectorAll('fieldset').forEach(fs => { fs.disabled = true; });
 
     document.getElementById('add-bijou-btn')
       ?.addEventListener('click', addBijouItem);
