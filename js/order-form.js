@@ -569,6 +569,17 @@ function setupCategoryToggle() {
   });
 }
 
+// ── Contact field validation (pure, exported for tests) ───────
+
+export function validateContactFields({ prenom, nom, email }) {
+  if (!prenom.trim()) return { field: 'prenom', message: 'Veuillez indiquer votre prénom.' };
+  if (!nom.trim())    return { field: 'nom',    message: 'Veuillez indiquer votre nom.' };
+  if (!email.trim())  return { field: 'email',  message: 'Veuillez indiquer votre adresse email.' };
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
+    return { field: 'email', message: 'Veuillez indiquer une adresse email valide.' };
+  return null;
+}
+
 // ── Formspree submission ──────────────────────────────
 
 function setupFormSubmit() {
@@ -580,6 +591,11 @@ function setupFormSubmit() {
     e.preventDefault();
 
     const categorie = document.querySelector('input[name="_categorie"]:checked')?.value;
+
+    if (!categorie) {
+      alert('Veuillez sélectionner une catégorie (Couture ou Bijoux).');
+      return;
+    }
 
     if (categorie === 'couture') {
       const checked = document.querySelectorAll('#articles-selector input[type="checkbox"]:checked');
@@ -639,6 +655,17 @@ function setupFormSubmit() {
       }
     }
 
+    const contactError = validateContactFields({
+      prenom: form.querySelector('#prenom')?.value ?? '',
+      nom:    form.querySelector('#nom')?.value    ?? '',
+      email:  form.querySelector('#email')?.value  ?? '',
+    });
+    if (contactError) {
+      form.querySelector(`#${contactError.field}`)?.focus();
+      alert(contactError.message);
+      return;
+    }
+
     const btn          = form.querySelector('[type="submit"]');
     const originalText = btn.textContent;
     btn.disabled       = true;
@@ -687,9 +714,12 @@ async function init() {
 
     document.getElementById('add-bijou-btn')
       ?.addEventListener('click', addBijouItem);
+
+    // Initialise the hidden summary fields so they are never empty on submission
+    updatePriceSummary();
   } catch (err) {
     console.error('Failed to initialise order form:', err);
   }
 }
 
-init();
+export const initPromise = init();

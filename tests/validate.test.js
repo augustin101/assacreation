@@ -1,9 +1,11 @@
 // tests/validate.test.js — Unit tests for js/validate.js
-// Run with: node --test tests/validate.test.js tests/data.test.js
 
-import { test, describe } from 'node:test';
-import assert from 'node:assert/strict';
+import { describe, test, expect, beforeAll, afterAll } from 'vitest';
 import { validateCouture, validateTissus, validateBijoux } from '../js/validate.js';
+
+// Suppress expected [Assa] warnings produced by intentionally invalid test data
+beforeAll(() => vi.spyOn(console, 'warn').mockImplementation(() => {}));
+afterAll(() => console.warn.mockRestore());
 
 // ── validateCouture ───────────────────────────────────────────
 
@@ -18,46 +20,46 @@ describe('validateCouture', () => {
 
   test('accepts a valid array', () => {
     const result = validateCouture([VALID]);
-    assert.equal(result.length, 1);
-    assert.deepEqual(result[0], VALID);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(VALID);
   });
 
   test('returns [] when input is not an array', () => {
-    assert.deepEqual(validateCouture(null),      []);
-    assert.deepEqual(validateCouture(undefined), []);
-    assert.deepEqual(validateCouture({}),        []);
-    assert.deepEqual(validateCouture('text'),    []);
+    expect(validateCouture(null)).toEqual([]);
+    expect(validateCouture(undefined)).toEqual([]);
+    expect(validateCouture({})).toEqual([]);
+    expect(validateCouture('text')).toEqual([]);
   });
 
   test('filters entries with an invalid id', () => {
-    assert.equal(validateCouture([{ ...VALID, id: ''   }]).length, 0, 'empty id');
-    assert.equal(validateCouture([{ ...VALID, id: 42   }]).length, 0, 'numeric id');
-    assert.equal(validateCouture([{ ...VALID, id: null }]).length, 0, 'null id');
+    expect(validateCouture([{ ...VALID, id: ''   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, id: 42   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, id: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid name', () => {
-    assert.equal(validateCouture([{ ...VALID, name: ''   }]).length, 0, 'empty name');
-    assert.equal(validateCouture([{ ...VALID, name: null }]).length, 0, 'null name');
+    expect(validateCouture([{ ...VALID, name: ''   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, name: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid price', () => {
-    assert.equal(validateCouture([{ ...VALID, price: -1   }]).length, 0, 'negative price');
-    assert.equal(validateCouture([{ ...VALID, price: '15' }]).length, 0, 'string price');
-    assert.equal(validateCouture([{ ...VALID, price: null }]).length, 0, 'null price');
+    expect(validateCouture([{ ...VALID, price: -1   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, price: '15' }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, price: null }])).toHaveLength(0);
   });
 
   test('accepts price = 0 (quote on request)', () => {
-    assert.equal(validateCouture([{ ...VALID, price: 0 }]).length, 1);
+    expect(validateCouture([{ ...VALID, price: 0 }])).toHaveLength(1);
   });
 
   test('filters entries with an invalid description', () => {
-    assert.equal(validateCouture([{ ...VALID, description: ''   }]).length, 0, 'empty description');
-    assert.equal(validateCouture([{ ...VALID, description: null }]).length, 0, 'null description');
+    expect(validateCouture([{ ...VALID, description: ''   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, description: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid image', () => {
-    assert.equal(validateCouture([{ ...VALID, image: ''   }]).length, 0, 'empty image');
-    assert.equal(validateCouture([{ ...VALID, image: null }]).length, 0, 'null image');
+    expect(validateCouture([{ ...VALID, image: ''   }])).toHaveLength(0);
+    expect(validateCouture([{ ...VALID, image: null }])).toHaveLength(0);
   });
 
   test('keeps only valid entries from a mixed array', () => {
@@ -67,13 +69,13 @@ describe('validateCouture', () => {
       { ...VALID, id: '',    name: 'Invalid — empty id' },
       { ...VALID, id: 'bad', price: -5 },
     ]);
-    assert.equal(result.length, 2);
-    assert.equal(result[0].id, 'bob');
-    assert.equal(result[1].id, 'tote-bag');
+    expect(result).toHaveLength(2);
+    expect(result[0].id).toBe('bob');
+    expect(result[1].id).toBe('tote-bag');
   });
 
   test('returns [] for an empty array', () => {
-    assert.deepEqual(validateCouture([]), []);
+    expect(validateCouture([])).toEqual([]);
   });
 });
 
@@ -88,40 +90,40 @@ describe('validateTissus', () => {
 
   test('accepts a valid array', () => {
     const result = validateTissus([VALID]);
-    assert.equal(result.length, 1);
-    assert.deepEqual(result[0], VALID);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(VALID);
   });
 
   test('returns [] when input is not an array', () => {
-    assert.deepEqual(validateTissus(null),   []);
-    assert.deepEqual(validateTissus({}),     []);
-    assert.deepEqual(validateTissus('text'), []);
+    expect(validateTissus(null)).toEqual([]);
+    expect(validateTissus({})).toEqual([]);
+    expect(validateTissus('text')).toEqual([]);
   });
 
   test('filters entries with an invalid id', () => {
-    assert.equal(validateTissus([{ ...VALID, id: 0    }]).length, 0, 'zero id');
-    assert.equal(validateTissus([{ ...VALID, id: -1   }]).length, 0, 'negative id');
-    assert.equal(validateTissus([{ ...VALID, id: '1'  }]).length, 0, 'string id');
-    assert.equal(validateTissus([{ ...VALID, id: 1.5  }]).length, 0, 'decimal id');
-    assert.equal(validateTissus([{ ...VALID, id: null }]).length, 0, 'null id');
+    expect(validateTissus([{ ...VALID, id: 0    }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, id: -1   }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, id: '1'  }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, id: 1.5  }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, id: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid image', () => {
-    assert.equal(validateTissus([{ ...VALID, image: ''   }]).length, 0, 'empty image');
-    assert.equal(validateTissus([{ ...VALID, image: null }]).length, 0, 'null image');
+    expect(validateTissus([{ ...VALID, image: ''   }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, image: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid disponibilite', () => {
-    assert.equal(validateTissus([{ ...VALID, disponibilite: 'epuise'    }]).length, 0, 'missing accent');
-    assert.equal(validateTissus([{ ...VALID, disponibilite: 'Disponible' }]).length, 0, 'wrong case');
-    assert.equal(validateTissus([{ ...VALID, disponibilite: ''           }]).length, 0, 'empty');
-    assert.equal(validateTissus([{ ...VALID, disponibilite: null         }]).length, 0, 'null');
+    expect(validateTissus([{ ...VALID, disponibilite: 'epuise'    }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, disponibilite: 'Disponible' }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, disponibilite: ''           }])).toHaveLength(0);
+    expect(validateTissus([{ ...VALID, disponibilite: null         }])).toHaveLength(0);
   });
 
   test('accepts all valid disponibilite values', () => {
-    assert.equal(validateTissus([{ ...VALID, disponibilite: 'disponible' }]).length, 1);
-    assert.equal(validateTissus([{ ...VALID, disponibilite: 'limité'     }]).length, 1);
-    assert.equal(validateTissus([{ ...VALID, disponibilite: 'épuisé'     }]).length, 1);
+    expect(validateTissus([{ ...VALID, disponibilite: 'disponible' }])).toHaveLength(1);
+    expect(validateTissus([{ ...VALID, disponibilite: 'limité'     }])).toHaveLength(1);
+    expect(validateTissus([{ ...VALID, disponibilite: 'épuisé'     }])).toHaveLength(1);
   });
 });
 
@@ -138,50 +140,50 @@ describe('validateBijoux', () => {
 
   test('accepts a valid array', () => {
     const result = validateBijoux([VALID]);
-    assert.equal(result.length, 1);
-    assert.deepEqual(result[0], VALID);
+    expect(result).toHaveLength(1);
+    expect(result[0]).toEqual(VALID);
   });
 
   test('returns [] when input is not an array', () => {
-    assert.deepEqual(validateBijoux(null),   []);
-    assert.deepEqual(validateBijoux({}),     []);
-    assert.deepEqual(validateBijoux('text'), []);
+    expect(validateBijoux(null)).toEqual([]);
+    expect(validateBijoux({})).toEqual([]);
+    expect(validateBijoux('text')).toEqual([]);
   });
 
   test('filters entries with an invalid id', () => {
-    assert.equal(validateBijoux([{ ...VALID, id: ''   }]).length, 0, 'empty id');
-    assert.equal(validateBijoux([{ ...VALID, id: null }]).length, 0, 'null id');
+    expect(validateBijoux([{ ...VALID, id: ''   }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, id: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid name', () => {
-    assert.equal(validateBijoux([{ ...VALID, name: ''   }]).length, 0, 'empty name');
-    assert.equal(validateBijoux([{ ...VALID, name: null }]).length, 0, 'null name');
+    expect(validateBijoux([{ ...VALID, name: ''   }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, name: null }])).toHaveLength(0);
   });
 
   test('filters entries with an invalid price', () => {
-    assert.equal(validateBijoux([{ ...VALID, price: -1   }]).length, 0, 'negative price');
-    assert.equal(validateBijoux([{ ...VALID, price: '15' }]).length, 0, 'string price');
+    expect(validateBijoux([{ ...VALID, price: -1   }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, price: '15' }])).toHaveLength(0);
   });
 
   test('accepts price = 0', () => {
-    assert.equal(validateBijoux([{ ...VALID, price: 0 }]).length, 1);
+    expect(validateBijoux([{ ...VALID, price: 0 }])).toHaveLength(1);
   });
 
   test('filters entries with an invalid base', () => {
-    assert.equal(validateBijoux([{ ...VALID, base: []              }]).length, 0, 'empty array');
-    assert.equal(validateBijoux([{ ...VALID, base: null            }]).length, 0, 'null');
-    assert.equal(validateBijoux([{ ...VALID, base: 'or'            }]).length, 0, 'string instead of array');
-    assert.equal(validateBijoux([{ ...VALID, base: ['platine']     }]).length, 0, 'unknown value');
-    assert.equal(validateBijoux([{ ...VALID, base: ['or', 'other'] }]).length, 0, 'mixed valid/invalid');
+    expect(validateBijoux([{ ...VALID, base: []              }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: null            }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: 'or'            }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: ['platine']     }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: ['or', 'other'] }])).toHaveLength(0);
   });
 
   test('accepts base with a single valid value', () => {
-    assert.equal(validateBijoux([{ ...VALID, base: ['or']     }]).length, 1, 'or only');
-    assert.equal(validateBijoux([{ ...VALID, base: ['argent'] }]).length, 1, 'argent only');
+    expect(validateBijoux([{ ...VALID, base: ['or']     }])).toHaveLength(1);
+    expect(validateBijoux([{ ...VALID, base: ['argent'] }])).toHaveLength(1);
   });
 
   test('filters entries with an invalid image', () => {
-    assert.equal(validateBijoux([{ ...VALID, image: ''   }]).length, 0, 'empty image');
-    assert.equal(validateBijoux([{ ...VALID, image: null }]).length, 0, 'null image');
+    expect(validateBijoux([{ ...VALID, image: ''   }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, image: null }])).toHaveLength(0);
   });
 });

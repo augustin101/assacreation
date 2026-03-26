@@ -1,6 +1,10 @@
 {
   "type": "module",
   "scripts": {
-    "test": "node --test tests/validate.test.js tests/data.test.js"
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "jsdom": "^20.0.3",
+    "vitest": "^2.1.9"
   }
 }
