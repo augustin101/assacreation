@@ -1,52 +1,52 @@
-# Schéma des fichiers de données
+# Data file schemas
 
-Ce dossier contient les trois fichiers JSON qu'Assa édite pour gérer le catalogue.
-Chaque fichier est un **tableau** d'objets. Les champs marqués `*` sont obligatoires.
+This folder contains the three JSON files Assa edits to manage the catalogue.
+Each file is an **array** of objects. Fields marked `*` are required.
 
 ---
 
 ## couture.json
 
-| Champ         | Type     | Description |
-|---------------|----------|-------------|
-| `id` *        | string   | Identifiant unique, sans espaces ni accents. Ex. `"tote-bag"` |
-| `name` *      | string   | Nom affiché sur le site. Ex. `"Tote bag"` |
-| `price` *     | number   | Prix en euros. Mettre `0` si le prix est sur devis. Ex. `15` |
-| `description` *| string  | Courte description affichée sur la fiche produit. |
-| `image` *     | string   | Chemin vers l'image. Ex. `"images/couture/tote-bag.avif"` |
+| Field         | Type    | Description |
+|---------------|---------|-------------|
+| `id` *        | string  | Unique slug, no spaces or special characters. e.g. `"tote-bag"` |
+| `name` *      | string  | Display name shown on the site. e.g. `"Tote bag"` |
+| `price` *     | number  | Price in euros. Use `0` if price is on request. e.g. `15` |
+| `description` *| string | Short description shown on the product card. |
+| `image` *     | string  | Path to the image file. e.g. `"images/couture/tote-bag.avif"` |
 
 ---
 
 ## tissus.json
 
-| Champ            | Type   | Description |
-|------------------|--------|-------------|
-| `id` *           | number | Numéro du tissu (entier, commence à 1). Ex. `1` |
-| `image` *        | string | Chemin vers la photo. Ex. `"images/tissus/tissu-01.avif"` |
-| `disponibilite` *| string | État du stock — **une seule** des valeurs suivantes : |
-|                  |        | `"disponible"` — en stock |
-|                  |        | `"limité"` — quantité limitée |
-|                  |        | `"épuisé"` — plus disponible (tissu grisé, non sélectionnable) |
+| Field             | Type   | Description |
+|-------------------|--------|-------------|
+| `id` *            | number | Fabric number (integer starting at 1). e.g. `1` |
+| `image` *         | string | Path to the photo. e.g. `"images/tissus/tissu-01.avif"` |
+| `disponibilite` * | string | Stock status — must be **exactly** one of: |
+|                   |        | `"disponible"` — in stock |
+|                   |        | `"limité"` — limited quantity |
+|                   |        | `"épuisé"` — out of stock (tile greyed out, not selectable) |
 
 ---
 
 ## bijoux.json
 
-| Champ    | Type     | Description |
+| Field    | Type     | Description |
 |----------|----------|-------------|
-| `id` *   | string   | Identifiant unique. Ex. `"collier-ras-de-cou"` |
-| `name` * | string   | Nom affiché. Ex. `"Collier ras de cou"` |
-| `price` *| number   | Prix en euros. Ex. `15` |
-| `base` * | string[] | Tableau des bases métal disponibles. Valeurs autorisées : `"or"`, `"argent"`. Ex. `["or", "argent"]` |
-| `image` *| string   | Chemin vers la photo. Ex. `"images/bijoux/collier-ras-de-cou.avif"` |
+| `id` *   | string   | Unique slug. e.g. `"collier-ras-de-cou"` |
+| `name` * | string   | Display name. e.g. `"Collier ras de cou"` |
+| `price` *| number   | Price in euros. e.g. `15` |
+| `base` * | string[] | Array of available metal bases. Allowed values: `"or"`, `"argent"`. e.g. `["or", "argent"]` |
+| `image` *| string   | Path to the photo. e.g. `"images/bijoux/collier-ras-de-cou.avif"` |
 
 ---
 
-## Erreurs de validation
+## Validation errors
 
-Si un champ est manquant ou incorrect, l'entrée concernée est **ignorée** et un avertissement
-apparaît dans la console du navigateur (F12 → Console), sous la forme :
+If a field is missing or has the wrong value, that entry is **skipped** and a warning
+appears in the browser console (F12 → Console):
 
 ```
-[Assa] couture.json — entrée "mon-article" ignorée : "price" doit être un nombre ≥ 0
+[Assa] couture.json — entry "my-item" skipped: "price" must be a number >= 0
 ```

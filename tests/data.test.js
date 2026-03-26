@@ -25,89 +25,89 @@ function imagePath(rel) {
 // ── couture.json ──────────────────────────────────────────────
 
 describe('couture.json', () => {
-  const raw = loadJSON('data/couture.json');
+  const raw   = loadJSON('data/couture.json');
   const valid = validateCouture(raw);
 
-  test('toutes les entrées passent la validation', () => {
+  test('all entries pass validation', () => {
     assert.equal(
       valid.length,
       raw.length,
-      `${raw.length - valid.length} entrée(s) invalide(s) — voir les avertissements ci-dessus`,
+      `${raw.length - valid.length} invalid entry/entries — see warnings above`,
     );
   });
 
-  test('pas d\'id dupliqué', () => {
-    const ids = raw.map(item => item.id);
+  test('no duplicate ids', () => {
+    const ids        = raw.map(item => item.id);
     const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
-    assert.deepEqual(duplicates, [], `ids dupliqués : ${duplicates.join(', ')}`);
+    assert.deepEqual(duplicates, [], `duplicate ids: ${duplicates.join(', ')}`);
   });
 
-  test('toutes les images existent sur le disque', () => {
+  test('all images exist on disk', () => {
     const missing = valid
       .map(item => item.image)
       .filter(img => !existsSync(imagePath(img)));
-    assert.deepEqual(missing, [], `images manquantes :\n  ${missing.join('\n  ')}`);
+    assert.deepEqual(missing, [], `missing images:\n  ${missing.join('\n  ')}`);
   });
 });
 
 // ── tissus.json ───────────────────────────────────────────────
 
 describe('tissus.json', () => {
-  const raw = loadJSON('data/tissus.json');
+  const raw   = loadJSON('data/tissus.json');
   const valid = validateTissus(raw);
 
-  test('toutes les entrées passent la validation', () => {
+  test('all entries pass validation', () => {
     assert.equal(
       valid.length,
       raw.length,
-      `${raw.length - valid.length} entrée(s) invalide(s) — voir les avertissements ci-dessus`,
+      `${raw.length - valid.length} invalid entry/entries — see warnings above`,
     );
   });
 
-  test('pas d\'id dupliqué', () => {
-    const ids = raw.map(item => item.id);
+  test('no duplicate ids', () => {
+    const ids        = raw.map(item => item.id);
     const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
-    assert.deepEqual(duplicates, [], `ids dupliqués : ${duplicates.join(', ')}`);
+    assert.deepEqual(duplicates, [], `duplicate ids: ${duplicates.join(', ')}`);
   });
 
-  test('les ids forment une suite continue sans trous', () => {
-    const ids = valid.map(t => t.id).sort((a, b) => a - b);
+  test('ids form a continuous sequence with no gaps', () => {
+    const ids      = valid.map(t => t.id).sort((a, b) => a - b);
     const expected = Array.from({ length: ids.length }, (_, i) => i + 1);
-    assert.deepEqual(ids, expected, `Suite attendue : ${expected.join(', ')}`);
+    assert.deepEqual(ids, expected, `expected sequence: ${expected.join(', ')}`);
   });
 
-  test('toutes les images existent sur le disque', () => {
+  test('all images exist on disk', () => {
     const missing = valid
       .map(t => t.image)
       .filter(img => !existsSync(imagePath(img)));
-    assert.deepEqual(missing, [], `images manquantes :\n  ${missing.join('\n  ')}`);
+    assert.deepEqual(missing, [], `missing images:\n  ${missing.join('\n  ')}`);
   });
 });
 
 // ── bijoux.json ───────────────────────────────────────────────
 
 describe('bijoux.json', () => {
-  const raw = loadJSON('data/bijoux.json');
+  const raw   = loadJSON('data/bijoux.json');
   const valid = validateBijoux(raw);
 
-  test('toutes les entrées passent la validation', () => {
+  test('all entries pass validation', () => {
     assert.equal(
       valid.length,
       raw.length,
-      `${raw.length - valid.length} entrée(s) invalide(s) — voir les avertissements ci-dessus`,
+      `${raw.length - valid.length} invalid entry/entries — see warnings above`,
     );
   });
 
-  test('pas d\'id dupliqué', () => {
-    const ids = raw.map(item => item.id);
+  test('no duplicate ids', () => {
+    const ids        = raw.map(item => item.id);
     const duplicates = ids.filter((id, i) => ids.indexOf(id) !== i);
-    assert.deepEqual(duplicates, [], `ids dupliqués : ${duplicates.join(', ')}`);
+    assert.deepEqual(duplicates, [], `duplicate ids: ${duplicates.join(', ')}`);
   });
 
-  test('toutes les images existent sur le disque', () => {
+  test('all images exist on disk', () => {
     const missing = valid
       .map(item => item.image)
       .filter(img => !existsSync(imagePath(img)));
-    assert.deepEqual(missing, [], `images manquantes :\n  ${missing.join('\n  ')}`);
+    assert.deepEqual(missing, [], `missing images:\n  ${missing.join('\n  ')}`);
   });
 });
