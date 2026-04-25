@@ -105,10 +105,10 @@
     "image": "images/bijoux/collier-perles-eau-nacrees.avif"
   },
   {
-    "id": "collier-ras-de-cou",
-    "name": "Collier ras de cou",
+    "id": "boghana_bj",
+    "name": "Boucle d'oreille ghanéenne",
     "price": 15.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/collier-ras-de-cou.avif"
-  }
+    "base": ["argent", "bleu","jaune"],
+    "image": "images/bijoux/boghana_bj.jpg"
+  },
 ]
