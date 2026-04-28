@@ -27,20 +27,7 @@ const FORM_HTML = `
     <input type="hidden" name="Nombre d'articles"  id="qty-hidden"   value="">
     <input type="hidden" name="Prix total estimé"  id="price-hidden" value="">
 
-    <fieldset class="form-section">
-      <div class="radio-cards">
-        <label class="radio-card">
-          <input type="radio" name="_categorie" value="couture" required>
-          <div class="radio-card-inner"><span class="radio-card-label">Couture</span></div>
-        </label>
-        <label class="radio-card">
-          <input type="radio" name="_categorie" value="bijoux" required>
-          <div class="radio-card-inner"><span class="radio-card-label">Bijoux</span></div>
-        </label>
-      </div>
-    </fieldset>
-
-    <div id="section-couture" hidden>
+    <div id="section-couture">
       <fieldset class="form-section">
         <div id="articles-selector" class="articles-list"></div>
       </fieldset>
@@ -49,7 +36,7 @@ const FORM_HTML = `
       </fieldset>
     </div>
 
-    <div id="section-bijoux" hidden>
+    <div id="section-bijoux">
       <fieldset class="form-section">
         <div id="bijoux-items" class="articles-list"></div>
         <div class="bijou-add-wrap">
@@ -126,12 +113,6 @@ function fillContact({ prenom = 'Marie', nom = 'Dupont', email = 'marie@exemple.
   $('prenom').value = prenom;
   $('nom').value    = nom;
   $('email').value  = email;
-}
-
-function selectCategory(value) {
-  const radio = document.querySelector(`input[name="_categorie"][value="${value}"]`);
-  radio.checked = true;
-  radio.dispatchEvent(new Event('change', { bubbles: true }));
 }
 
 function checkArticle(id) {

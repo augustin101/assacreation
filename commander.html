@@ -50,41 +50,8 @@
             <input type="hidden" name="Nombre d'articles" id="qty-hidden" value="">
             <input type="hidden" name="Prix total estimé" id="price-hidden" value="">
 
-            <!-- Step 1: Category selection -->
-            <fieldset class="form-section">
-              <legend>Que souhaitez-vous commander ?</legend>
-              <div class="radio-cards">
-                <label class="radio-card">
-                  <input type="radio" name="_categorie" value="couture" required>
-                  <div class="radio-card-inner">
-                    <span class="radio-card-icon" aria-hidden="true">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
-                        <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
-                        <line x1="3" y1="6" x2="21" y2="6"/>
-                        <path d="M16 10a4 4 0 0 1-8 0"/>
-                      </svg>
-                    </span>
-                    <span class="radio-card-label">Couture</span>
-                    <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Vêtements &amp; accessoires</span>
-                  </div>
-                </label>
-                <label class="radio-card">
-                  <input type="radio" name="_categorie" value="bijoux" required>
-                  <div class="radio-card-inner">
-                    <span class="radio-card-icon" aria-hidden="true">
-                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="color:var(--color-terracotta)">
-                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                      </svg>
-                    </span>
-                    <span class="radio-card-label">Bijoux</span>
-                    <span style="font-size:var(--text-xs);color:var(--color-text-muted)">Perles tissées à la main</span>
-                  </div>
-                </label>
-              </div>
-            </fieldset>
-
             <!-- Couture section -->
-            <div id="section-couture" hidden>
+            <div id="section-couture">
               <fieldset class="form-section">
                 <legend>Vos articles</legend>
                 <p class="form-hint">Cochez les articles souhaités et ajustez les quantités.</p>
@@ -105,7 +72,7 @@
             </div>
 
             <!-- Bijoux section -->
-            <div id="section-bijoux" hidden>
+            <div id="section-bijoux">
               <fieldset class="form-section">
                 <legend>Vos bijoux</legend>
                 <p class="form-hint">Ajoutez les bijoux souhaités. Pour chaque pièce, choisissez le modèle et la base métal si applicable.</p>
