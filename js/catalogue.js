@@ -49,7 +49,7 @@ function createProductCard({ name, price, description, image }) {
   return article;
 }
 
-// Bijoux cards: base options overlaid on the image, price pinned to card bottom
+// Bijoux cards: base options above the price, pinned to card bottom
 function createBijouxCard({ name, price, base, image }) {
   const baseLabel = base.map(b => b.charAt(0).toUpperCase() + b.slice(1)).join(' / ');
   const article = document.createElement('article');
@@ -58,13 +58,13 @@ function createBijouxCard({ name, price, base, image }) {
     <div class="product-img-wrap">
       <img src="${image}" alt="${name}" loading="lazy">
       <div class="product-img-overlay" aria-hidden="true"></div>
-      <span class="product-base-badge">${baseLabel}</span>
     </div>
     <div class="product-info">
       <div class="product-info-body">
         <h3>${name}</h3>
       </div>
       <div class="product-info-footer">
+        <span class="product-base-badge">${baseLabel}</span>
         ${priceHtml(price)}
       </div>
     </div>
