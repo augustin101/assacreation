@@ -65,6 +65,23 @@ function updateQtyControls() {
   updateOrderCounter();
 }
 
+function updateCheckboxStates() {
+  const currentTotal = getTotalQty();
+  const allCheckboxes = document.querySelectorAll('input[name="articles"]');
+  
+  allCheckboxes.forEach(cb => {
+    // If we are at/over max, disable any checkbox that isn't already checked
+    if (currentTotal >= MAX_TOTAL) {
+      if (!cb.checked) {
+        cb.disabled = true;
+      }
+    } else {
+      // Otherwise, make sure they are enabled
+      cb.disabled = false;
+    }
+  });
+}
+
 // ── Fabric selection modal ────────────────────────────
 
 let fabricModalEl = null;
@@ -270,6 +287,7 @@ function renderArticlesSelector(couture) {
       qtyDiv.hidden  = !cb.checked;
       qtyIn.disabled = !cb.checked;
       rebuildFabricStrip(row, id, cb.checked ? parseInt(qtyIn.value, 10) : 0);
+      updateCheckboxStates();
       updateQtyControls();
       updatePriceSummary();
     });
@@ -282,6 +300,7 @@ function renderArticlesSelector(couture) {
       if (newQty === current) return;
       qtyIn.value = newQty;
       rebuildFabricStrip(row, id, newQty);
+      updateCheckboxStates();
       updateQtyControls();
       updatePriceSummary();
     }
@@ -476,6 +495,7 @@ function addBijouItem() {
   removeBtn.textContent = '×';
   removeBtn.addEventListener('click', () => {
     row.remove();
+    updateCheckboxStates();
     updateQtyControls();
     updatePriceSummary();
   });
@@ -493,6 +513,7 @@ function addBijouItem() {
   row.appendChild(header);
   container.appendChild(row);
 
+  updateCheckboxStates();
   updateQtyControls();
   updatePriceSummary();
 }
