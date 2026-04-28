@@ -7,88 +7,81 @@
     "image": "images/bijoux/baia-bracelet-de-hanche.avif"
   },
   {
-    "id": "boucle-oreilles-2",
-    "name": "Boucles d'oreilles",
+    "id": "boucles-oreilles-1",
+    "name": "Boucles d'oreilles — Type I",
     "price": 10.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucle-oreilles-2.avif"
   },
   {
-    "id": "boucle-oreilles-creole",
-    "name": "Boucles d'oreilles créoles",
-    "price": 7.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-creole.avif"
-  },
-  {
-    "id": "boucle-oreilles-paquerettes",
-    "name": "Boucles d'oreilles pâquerettes",
-    "price": 15.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-paquerettes.avif"
-  },
-  {
-    "id": "boucle-oreilles-perle-baoule",
-    "name": "Boucles d'oreilles perle baoulé",
-    "price": 6.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perle-baoule.avif"
-  },
-  {
-    "id": "boucle-oreilles-perles-de-kapele",
-    "name": "Boucles d'oreilles perles de Kapélé",
-    "price": 12.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perles-de-kapele.avif"
-  },
-  {
-    "id": "boucle-oreilles-perles-de-kapele-2",
-    "name": "Boucles d'oreilles perles de Kapélé (variante 2)",
-    "price": 12.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perles-de-kapele-2.avif"
-  },
-  {
-    "id": "boucle-oreilles-perles-de-kapele-3",
-    "name": "Boucles d'oreilles perles de Kapélé (variante 3)",
-    "price": 12.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perles-de-kapele-3.avif"
-  },
-  {
-    "id": "boucle-oreilles-torsadees",
-    "name": "Boucles d'oreilles torsadées",
-    "price": 8.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-torsadees.avif"
-  },
-  {
-    "id": "boucle-oreilles-trefles",
-    "name": "Boucles d'oreilles trèfles",
-    "price": 8.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-trefles.avif"
-  },
-  {
-    "id": "boucles-oreilles",
-    "name": "Boucles d'oreilles",
+    "id": "boucles-oreilles-2",
+    "name": "Boucles d'oreilles — Type II",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucles-oreilles.avif"
   },
   {
     "id": "boucles-oreilles-cauri",
-    "name": "Boucles d'oreilles Cauri",
+    "name": "Boucles d'oreilles cauri",
     "price": 8.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucles-oreilles-cauri.avif"
   },
   {
-    "id": "boucles-oreilles-ghaneennes",
-    "name": "Boucles d'oreilles Ghanéennes",
+    "id": "boucles-oreilles-creoles",
+    "name": "Boucles d'oreilles créoles",
+    "price": 7.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-creole.avif"
+  },
+  {
+    "id": "boucles-oreilles-ghaneennes-1",
+    "name": "Boucles d'oreilles ghanéennes — Type I",
     "price": 12.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucles-oreilles-ghaneennes.avif"
+  },
+  {
+    "id": "boucles-oreilles-ghaneennes-2",
+    "name": "Boucles d'oreilles ghanéennes — Type II",
+    "price": 15.00,
+    "base": ["argent", "bleu", "jaune"],
+    "image": "images/bijoux/boghana_bj.avif"
+  },
+  {
+    "id": "boucles-oreilles-paquerettes",
+    "name": "Boucles d'oreilles pâquerettes",
+    "price": 15.00,
+    "base": ["or", "argent"],
+    "image": "images/bofimo_paquerettes"
+  },
+  {
+    "id": "boucles-oreilles-perle-baoule",
+    "name": "Boucles d'oreilles perle baoulé",
+    "price": 6.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-perle-baoule.avif"
+  },
+  {
+    "id": "boucles-oreilles-perles-de-kapele-1",
+    "name": "Boucles d'oreilles perles de Kapélé — Type I",
+    "price": 12.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-perles-de-kapele.avif"
+  },
+  {
+    "id": "boucles-oreilles-perles-de-kapele-2",
+    "name": "Boucles d'oreilles perles de Kapélé — Type II",
+    "price": 12.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-perles-de-kapele-2.avif"
+  },
+  {
+    "id": "boucles-oreilles-perles-de-kapele-3",
+    "name": "Boucles d'oreilles perles de Kapélé — Type III",
+    "price": 12.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-perles-de-kapele-3.avif"
   },
   {
     "id": "boucles-oreilles-spirale",
@@ -98,17 +91,24 @@
     "image": "images/bijoux/boucles-oreilles-spirale.avif"
   },
   {
+    "id": "boucles-oreilles-torsadees",
+    "name": "Boucles d'oreilles torsadées",
+    "price": 8.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-torsadees.avif"
+  },
+  {
+    "id": "boucles-oreilles-trefles",
+    "name": "Boucles d'oreilles trèfles",
+    "price": 8.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-trefles.avif"
+  },
+  {
     "id": "collier-perles-eau-nacrees",
     "name": "Collier perles d'eau nacrées",
     "price": 40.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/collier-perles-eau-nacrees.avif"
-  },
-  {
-    "id": "boghana_bj",
-    "name": "Boucle d'oreille ghanéenne",
-    "price": 15.00,
-    "base": ["argent", "bleu","jaune"],
-    "image": "images/bijoux/boghana_bj.jpg"
-  },
+  }
 ]

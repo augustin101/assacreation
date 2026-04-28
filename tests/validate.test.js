@@ -170,16 +170,17 @@ describe('validateBijoux', () => {
   });
 
   test('filters entries with an invalid base', () => {
-    expect(validateBijoux([{ ...VALID, base: []              }])).toHaveLength(0);
-    expect(validateBijoux([{ ...VALID, base: null            }])).toHaveLength(0);
-    expect(validateBijoux([{ ...VALID, base: 'or'            }])).toHaveLength(0);
-    expect(validateBijoux([{ ...VALID, base: ['platine']     }])).toHaveLength(0);
-    expect(validateBijoux([{ ...VALID, base: ['or', 'other'] }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: []   }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: null }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: 'or' }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: [1]  }])).toHaveLength(0);
+    expect(validateBijoux([{ ...VALID, base: [''] }])).toHaveLength(0);
   });
 
-  test('accepts base with a single valid value', () => {
-    expect(validateBijoux([{ ...VALID, base: ['or']     }])).toHaveLength(1);
-    expect(validateBijoux([{ ...VALID, base: ['argent'] }])).toHaveLength(1);
+  test('accepts base with any non-empty string values', () => {
+    expect(validateBijoux([{ ...VALID, base: ['or']                    }])).toHaveLength(1);
+    expect(validateBijoux([{ ...VALID, base: ['argent']                }])).toHaveLength(1);
+    expect(validateBijoux([{ ...VALID, base: ['argent', 'bleu', 'jaune'] }])).toHaveLength(1);
   });
 
   test('filters entries with an invalid image', () => {

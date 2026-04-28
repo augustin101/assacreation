@@ -25,12 +25,11 @@
  *   id    string   Unique slug, e.g. "collier-ras-de-cou"
  *   name  string   Display name
  *   price number   Price in €, >= 0
- *   base  array    Non-empty array, allowed values: "or" | "argent"
+ *   base  array    Non-empty array of non-empty strings, e.g. ["or", "argent"] or ["argent", "bleu", "jaune"]
  *   image string   Relative path, e.g. "images/bijoux/collier-ras-de-cou.avif"
  */
 
 const DISPONIBILITE_VALUES = ['disponible', 'limité', 'épuisé'];
-const BASE_VALUES          = ['or', 'argent'];
 
 function warn(file, id, msg) {
   console.warn(`[Assa] ${file} — entry "${id}" skipped: ${msg}`);
@@ -85,8 +84,8 @@ export function validateBijoux(data) {
     if (typeof id    !== 'string' || !id)         { warn('bijoux.json', id ?? '?', '"id" must be a non-empty string');               return false; }
     if (typeof name  !== 'string' || !name)       { warn('bijoux.json', id,        '"name" must be a non-empty string');             return false; }
     if (typeof price !== 'number' || price < 0)   { warn('bijoux.json', id,        '"price" must be a number >= 0');                 return false; }
-    if (!Array.isArray(base) || base.length === 0){ warn('bijoux.json', id,        '"base" must be a non-empty array');              return false; }
-    if (!base.every(b => BASE_VALUES.includes(b))){ warn('bijoux.json', id,        `"base" allowed values: ${BASE_VALUES.join(', ')}`); return false; }
+    if (!Array.isArray(base) || base.length === 0)              { warn('bijoux.json', id, '"base" must be a non-empty array');                    return false; }
+    if (!base.every(b => typeof b === 'string' && b.length > 0)){ warn('bijoux.json', id, '"base" entries must be non-empty strings');            return false; }
     if (typeof image !== 'string' || !image)      { warn('bijoux.json', id,        '"image" must be a non-empty string');            return false; }
     return true;
   });

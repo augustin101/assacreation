@@ -1,6 +1,7 @@
 {
   "type": "module",
   "scripts": {
+    "dev": "npx browser-sync start --server --files '**/*.html,**/*.css,**/*.js,data/*.json' --no-notify --port 8000",
     "test": "vitest run"
   },
   "devDependencies": {

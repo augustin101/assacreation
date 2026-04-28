@@ -395,18 +395,25 @@ function selectBijou(bijouxId, image, name, base, price) {
   // Show the item name
   infoEl.querySelector('.bijou-item-name').textContent = name;
 
-  // Show/hide metal choice depending on whether multiple bases exist
+  // Show/hide base choice depending on whether multiple options exist
   const metalGroup  = infoEl.querySelector('.bijou-metal-group');
   const metalHidden = row.querySelector('input.bijou-metal-hidden');
   if (metalGroup && metalHidden) {
+    const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
     if (base.length <= 1) {
-      // Single base — auto-set, no choice needed
-      metalGroup.hidden  = true;
-      metalHidden.value  = base[0] === 'or' ? 'Or' : 'Argent';
+      metalGroup.hidden = true;
+      metalHidden.value = cap(base[0]);
     } else {
-      // Multiple bases — show radio choice, reset previous selection
+      const itemId = metalGroup.dataset.itemId;
+      metalGroup.innerHTML = base.map(b => `
+        <label class="radio-inline">
+          <input type="radio" name="_metal_${itemId}" value="${b}">
+          <span>${cap(b)}</span>
+        </label>`).join('');
+      metalGroup.querySelectorAll('input[type="radio"]').forEach(r => {
+        r.addEventListener('change', () => { metalHidden.value = cap(r.value); });
+      });
       metalGroup.hidden = false;
-      metalGroup.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
       metalHidden.value = '';
     }
   }
@@ -453,29 +460,13 @@ function addBijouItem() {
     <span class="fabric-trigger-caption">Choisir</span>
   `;
 
-  // Info area: name + metal choice
+  // Info area: name + metal/base choice (radios populated dynamically by selectBijou)
   const infoEl = document.createElement('div');
   infoEl.className = 'bijou-info';
   infoEl.innerHTML = `
     <span class="bijou-item-name article-name"></span>
-    <div class="bijou-metal-group radio-inline-group" hidden>
-      <label class="radio-inline">
-        <input type="radio" name="_metal_${itemId}" value="or">
-        <span>Or</span>
-      </label>
-      <label class="radio-inline">
-        <input type="radio" name="_metal_${itemId}" value="argent">
-        <span>Argent</span>
-      </label>
-    </div>
+    <div class="bijou-metal-group radio-inline-group" data-item-id="${itemId}" hidden></div>
   `;
-
-  // Sync radio → hidden input (human-readable label for email)
-  infoEl.querySelectorAll('input[type="radio"]').forEach(radio => {
-    radio.addEventListener('change', () => {
-      metalHidden.value = radio.value === 'or' ? 'Or' : 'Argent';
-    });
-  });
 
   // Remove button
   const removeBtn = document.createElement('button');

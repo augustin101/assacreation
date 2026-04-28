@@ -8,7 +8,7 @@
   { "id": 7,  "image": "images/tissus/tissu-07.avif", "disponibilite": "disponible" },
   { "id": 8,  "image": "images/tissus/tissu-08.avif", "disponibilite": "disponible" },
   { "id": 9,  "image": "images/tissus/tissu-09.avif", "disponibilite": "disponible" },
-  { "id": 10, "image": "images/tissus/tissu-10.avif", "disponibilite": "indisponible" },
+  { "id": 10, "image": "images/tissus/tissu-10.avif", "disponibilite": "épuisé" },
   { "id": 11, "image": "images/tissus/tissu-11.avif", "disponibilite": "disponible" },
   { "id": 12, "image": "images/tissus/tissu-12.avif", "disponibilite": "disponible" },
   { "id": 13, "image": "images/tissus/tissu-13.avif", "disponibilite": "disponible" },
