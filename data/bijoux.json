@@ -7,39 +7,11 @@
     "image": "images/bijoux/boakan_ov.avif"
   },
   {
-    "id": "baia-bracelet-de-hanche",
-    "name": "Baia — Bracelet de hanche",
-    "price": 15.00,
+    "id": "boucles-oreilles-perle-baoule",
+    "name": "Boucles d'oreilles perle baoulé",
+    "price": 6.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/baia-bracelet-de-hanche.avif"
-  },
-  {
-    "id": "boucles-oreilles-1",
-    "name": "Boucles d'oreilles — Type I",
-    "price": 10.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-2.avif"
-  },
-  {
-    "id": "boucles-oreilles-2",
-    "name": "Boucles d'oreilles — Type II",
-    "price": 15.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucles-oreilles.avif"
-  },
-  {
-    "id": "boucles-oreilles-cauri",
-    "name": "Boucles d'oreilles cauri",
-    "price": 8.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucles-oreilles-cauri.avif"
-  },
-  {
-    "id": "boucles-oreilles-creoles",
-    "name": "Boucles d'oreilles créoles",
-    "price": 7.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-creole.avif"
+    "image": "images/bijoux/boucle-oreilles-perle-baoule.avif"
   },
   {
     "id": "boucles-oreilles-ghaneennes-1",
@@ -55,19 +27,33 @@
     "base": ["argent", "bleu", "jaune"],
     "image": "images/bijoux/boghana_bj.avif"
   },
+   {
+    "id": "boucles-oreilles-1",
+    "name": "Boucles d'oreilles — Type I",
+    "price": 10.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-2.avif"
+  },
+  {
+    "id": "boucles-oreilles-2",
+    "name": "Boucles d'oreilles — Type II",
+    "price": 15.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucles-oreilles.avif"
+  },
+  {
+    "id": "baia-bracelet-de-hanche",
+    "name": "Baia — Bracelet de hanche",
+    "price": 15.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/baia-bracelet-de-hanche.avif"
+  },
   {
     "id": "boucles-oreilles-paquerettes",
     "name": "Boucles d'oreilles pâquerettes",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bofimo_paquerettes"
-  },
-  {
-    "id": "boucles-oreilles-perle-baoule",
-    "name": "Boucles d'oreilles perle baoulé",
-    "price": 6.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perle-baoule.avif"
   },
   {
     "id": "boucles-oreilles-perles-de-kapele-1",
@@ -96,6 +82,20 @@
     "price": 8.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucles-oreilles-spirale.avif"
+  },
+   {
+    "id": "boucles-oreilles-cauri",
+    "name": "Boucles d'oreilles cauri",
+    "price": 8.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucles-oreilles-cauri.avif"
+  },
+  {
+    "id": "boucles-oreilles-creoles",
+    "name": "Boucles d'oreilles créoles",
+    "price": 7.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-creole.avif"
   },
   {
     "id": "boucles-oreilles-torsadees",
