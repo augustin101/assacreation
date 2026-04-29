@@ -1,5 +1,12 @@
 [
   {
+    "id": "boakan_ov.avif",
+    "name": "Boucle d'oreille akan",
+    "price": 15.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boakan_ov.avif"
+  },
+  {
     "id": "baia-bracelet-de-hanche",
     "name": "Baia — Bracelet de hanche",
     "price": 15.00,
