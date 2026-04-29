@@ -68,5 +68,19 @@
     "price": 10.00,
     "description": "Grand tote bag résistant en tissu wax, anses solides renforcées.",
     "image": "images/couture/tote-bag.avif"
+  },
+  {
+    "id": "cravatte",
+    "name": "Cravatte",
+    "price": 15.00,
+    "description": "Cravatte design en wax",
+    "image": "images/couture/tote-bag.avif"
+  },
+  {
+    "id": "top_été",
+    "name": "Top été",
+    "price": 25.00,
+    "description": "Top dos nu d'été à lanières",
+    "image": "images/couture/tote-bag.avif"
   }
 ]
