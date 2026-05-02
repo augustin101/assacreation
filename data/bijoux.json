@@ -1,28 +1,42 @@
 [
   {
-    "id": "boakan_ov.avif",
+    "id": "boakan_ov",
     "name": "Boucle d'oreille akan",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boakan_ov.avif"
   },
   {
-    "id": "boucles-oreilles-perle-baoule",
+    "id": "boakan_ro",
     "name": "Boucles d'oreilles perle baoulé",
     "price": 6.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perle-baoule.avif"
+    "image": "images/bijoux/boakan_ro.avif"
   },
   {
-    "id": "boucles-oreilles-ghaneennes-1",
-    "name": "Boucles d'oreilles ghanéennes — Type I",
+    "id": "boghana_bbr",
+    "name": "Boucles d'oreilles ghanéennes",
     "price": 12.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/boucles-oreilles-ghaneennes.avif"
+    "image": "images/bijoux/boghana_bbr.avif"
+  },
+   {
+    "id": "boghana_bjr",
+    "name": "Boucles d'oreilles ghanéennes",
+    "price": 12.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boghana_bjr.avif"
   },
   {
-    "id": "boucles-oreilles-ghaneennes-2",
-    "name": "Boucles d'oreilles ghanéennes — Type II",
+    "id": "boghana_bb",
+    "name": "Boucles d'oreilles ghanéennes",
+    "price": 12.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boghana_bb.avif"
+  },
+  {
+    "id": "boghana_bj",
+    "name": "Boucles d'oreilles ghanéennes",
     "price": 15.00,
     "base": ["argent", "bleu", "jaune"],
     "image": "images/bijoux/boghana_bj.avif"
@@ -63,11 +77,11 @@
     "image": "images/bijoux/boucle-oreilles-perles-de-kapele.avif"
   },
   {
-    "id": "boucles-oreilles-perles-de-kapele-2",
-    "name": "Boucles d'oreilles perles de Kapélé — Type II",
+    "id": "bokapele_bb",
+    "name": "Boucles d'oreilles perles de Kapélé",
     "price": 12.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-perles-de-kapele-2.avif"
+    "image": "images/bijoux/bokapele_bb.avif"
   },
   {
     "id": "boucles-oreilles-perles-de-kapele-3",
@@ -84,11 +98,11 @@
     "image": "images/bijoux/boucles-oreilles-spirale.avif"
   },
    {
-    "id": "boucles-oreilles-cauri",
-    "name": "Boucles d'oreilles cauri",
+    "id": "bocaurie_ro",
+    "name": "Boucles d'oreilles cauries",
     "price": 8.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/boucles-oreilles-cauri.avif"
+    "image": "images/bijoux/bocaurie_ro.avif"
   },
   {
     "id": "boucles-oreilles-creoles",
