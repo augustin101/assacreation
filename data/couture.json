@@ -9,7 +9,7 @@
   {
     "id": "calecon-parachute-unisexe",
     "name": "Caleçon parachute unisexe",
-    "price":17.000,
+    "price":20.000,
     "description": "Caleçon unisexe en tissu parachute léger et confortable.",
     "image": "images/couture/calecon-parachute-unisexe.avif"
   },
@@ -74,13 +74,13 @@
     "name": "Cravatte",
     "price": 15.00,
     "description": "Cravatte design en wax",
-    "image": ""
+    "image": "images/couture/image.jpg"
   },
   {
     "id": "top_été",
     "name": "Top été",
     "price": 25.00,
     "description": "Top dos nu d'été à lanières",
-    "image": ""
+    "image": "images/couture/image.jpg"
   }
 ]
