@@ -112,6 +112,13 @@
     "image": "images/bijoux/boucle-oreilles-creole.avif"
   },
    {
+    "id": "boucles-oreilles-trefles",
+    "name": "Boucles d'oreilles trèfles",
+    "price": 8.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-trefles.avif"
+  },
+  {
     "id": "boucles-oreilles-1",
     "name": "Boucles d'oreilles — Type I",
     "price": 10.00,
@@ -124,13 +131,6 @@
     "price": 8.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucle-oreilles-torsadees.avif"
-  },
-  {
-    "id": "boucles-oreilles-trefles",
-    "name": "Boucles d'oreilles trèfles",
-    "price": 8.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-trefles.avif"
   },
   {
     "id": "co_nacre",
