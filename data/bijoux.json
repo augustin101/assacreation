@@ -41,13 +41,6 @@
     "base": ["argent", "bleu", "jaune"],
     "image": "images/bijoux/boghana_bj.avif"
   },
-   {
-    "id": "boucles-oreilles-1",
-    "name": "Boucles d'oreilles — Type I",
-    "price": 10.00,
-    "base": ["or", "argent"],
-    "image": "images/bijoux/boucle-oreilles-2.avif"
-  },
   {
     "id": "boucles-oreilles-2",
     "name": "Boucles d'oreilles — Type II",
@@ -110,6 +103,13 @@
     "price": 7.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boucle-oreilles-creole.avif"
+  },
+   {
+    "id": "boucles-oreilles-1",
+    "name": "Boucles d'oreilles — Type I",
+    "price": 10.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-2.avif"
   },
   {
     "id": "boucles-oreilles-torsadees",
