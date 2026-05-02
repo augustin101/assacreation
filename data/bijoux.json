@@ -42,11 +42,18 @@
     "image": "images/bijoux/boghana_bj.avif"
   },
   {
-    "id": "boucles-oreilles-2",
-    "name": "Boucles d'oreilles — Type II",
+    "id": "botisse_b",
+    "name": "Boucles d'oreilles tissé",
     "price": 15.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/boucles-oreilles.avif"
+    "image": "images/bijoux/botisse_b.avif"
+  },
+    {
+    "id": "botisse_roj",
+    "name": "Boucles d'oreilles tissé",
+    "price": 15.00,
+    "base": ["or", "argent"],
+    "image": "images/bijoux/botisse_roj.avif"
   },
   {
     "id": "baia-bracelet-de-hanche",
@@ -126,11 +133,11 @@
     "image": "images/bijoux/boucle-oreilles-trefles.avif"
   },
   {
-    "id": "collier-perles-eau-nacrees",
+    "id": "co_nacre",
     "name": "Collier perles d'eau nacrées",
     "price": 40.00,
     "base": ["or", "argent"],
-    "image": "images/bijoux/collier-perles-eau-nacrees.avif"
+    "image": "images/bijoux/co_nacre.avif"
   },
   {
     "id": "corascou",
