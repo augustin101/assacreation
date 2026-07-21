@@ -34,5 +34,6 @@
   { "id": 33, "image": "images/tissus/tissu-33.avif", "disponibilite": "disponible" },
   { "id": 34, "image": "images/tissus/tissu-34.avif", "disponibilite": "disponible" },
   { "id": 35, "image": "images/tissus/tissu-35.avif", "disponibilite": "disponible" },
-   { "id": 36, "image": "images/tissus/tissu-36.avif", "disponibilite": "disponible" }
+  { "id": 36, "image": "images/tissus/tissu-36.avif", "disponibilite": "disponible" },
+  { "id": 37, "image": "images/tissus/tissu-37.avif", "disponibilite": "disponible" }
 ]
