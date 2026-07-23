@@ -35,5 +35,8 @@
   { "id": 34, "image": "images/tissus/tissu-34.avif", "disponibilite": "disponible" },
   { "id": 35, "image": "images/tissus/tissu-35.avif", "disponibilite": "disponible" },
   { "id": 36, "image": "images/tissus/tissu-36.avif", "disponibilite": "disponible" },
-  { "id": 37, "image": "images/tissus/tissu-37.avif", "disponibilite": "disponible" }
+  { "id": 37, "image": "images/tissus/tissu-37.avif", "disponibilite": "disponible" },
+  { "id": 38, "image": "images/tissus/tissu-38.avif", "disponibilite": "disponible" },
+  { "id": 39, "image": "images/tissus/tissu-39.avif", "disponibilite": "disponible" },
+  { "id": 40, "image": "images/tissus/tissu-40.avif", "disponibilite": "disponible" }
 ]
