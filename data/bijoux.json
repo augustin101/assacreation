@@ -1,5 +1,33 @@
 [
   {
+    "id": "botors_shell",
+    "name": "Boucle d'oreille torsadé",
+    "price": 10.00,
+    "base": ["doré"],
+    "image": "images/bijoux/boakan_ov.avif"
+  },
+  {
+    "id": "botors_spirale",
+    "name": "Boucle d'oreille torsadé",
+    "price": 10.00,
+    "base": ["argenté"],
+    "image": "images/bijoux/boakan_ov.avif"
+  },
+   {
+    "id": "botors_labyrinth",
+    "name": "Boucle d'oreille torsadé",
+    "price": 10.00,
+    "base": ["argenté","doré"],
+    "image": "images/bijoux/boakan_ov.avif"
+  },
+  {
+    "id": "botors_petite",
+    "name": "Boucle d'oreille torsadé",
+    "price": 5.00,
+    "base": ["argenté"],
+    "image": "images/bijoux/boakan_ov.avif"
+  },
+    {
     "id": "boakan_ov",
     "name": "Boucle d'oreille akan",
     "price": 15.00,
@@ -74,6 +102,13 @@
     "name": "Boucles d'oreilles perles de Kapélé — Type I",
     "price": 12.00,
     "base": ["or", "argent"],
+    "image": "images/bijoux/boucle-oreilles-perles-de-kapele.avif"
+  },
+  {
+    "id": "bokapele-oj",
+    "name": "Boucles d'oreilles perles de Kapélé",
+    "price": 12.00,
+    "base": ["or"],
     "image": "images/bijoux/boucle-oreilles-perles-de-kapele.avif"
   },
   {
