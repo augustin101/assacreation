@@ -17,8 +17,15 @@
     "id": "botors_labyrinth",
     "name": "Boucle d'oreille torsadé",
     "price": 10.00,
-    "base": ["argenté","doré"],
-    "image": ["images/bijoux/bolabyr_or.avif","images/bijoux/bolabyr_ar.avif"]
+    "base": ["doré"],
+    "image": "images/bijoux/bolabyr_or.avif"
+  },
+   {
+    "id": "botors_labyrinth",
+    "name": "Boucle d'oreille torsadé",
+    "price": 10.00,
+    "base": ["argenté"],
+    "image": "images/bijoux/bolabyr_ar.avif"
   },
   {
     "id": "botors_petite",
