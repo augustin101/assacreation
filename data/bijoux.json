@@ -1,42 +1,42 @@
 [
   {
     "id": "botors_shell",
-    "name": "Boucle d'oreille torsadé",
+    "name": "Boucles d'oreilles torsadées",
     "price": 10.00,
     "base": ["doré"],
     "image": "images/bijoux/boshell_or.avif"
   },
   {
     "id": "botors_spirale",
-    "name": "Boucle d'oreille torsadé",
+    "name": "Boucles d'oreilles torsadées",
     "price": 10.00,
     "base": ["argenté"],
     "image": "images/bijoux/bospir_ar.avif"
   },
    {
     "id": "botors_labyrinth",
-    "name": "Boucle d'oreille torsadé",
+    "name": "Boucles d'oreilles torsadées",
     "price": 10.00,
     "base": ["doré"],
     "image": "images/bijoux/bolabyr_or.avif"
   },
    {
     "id": "botors_labyrinth",
-    "name": "Boucle d'oreille torsadé",
+    "name": "Boucles d'oreilles torsadées",
     "price": 10.00,
     "base": ["argenté"],
     "image": "images/bijoux/bolabyr_ar.avif"
   },
   {
     "id": "botors_petite",
-    "name": "Boucle d'oreille torsadé",
+    "name": "Boucles d'oreilles torsadées",
     "price": 5.00,
     "base": ["argenté"],
     "image": "images/bijoux/bomini_ar.avif"
   },
     {
     "id": "boakan_ov",
-    "name": "Boucle d'oreille akan",
+    "name": "Boucles d'oreilles akan",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/boakan_ov.avif"
@@ -78,14 +78,14 @@
   },
   {
     "id": "botisse_b",
-    "name": "Boucles d'oreilles tissé",
+    "name": "Boucles d'oreilles tissées",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/botisse_b.avif"
   },
     {
     "id": "botisse_roj",
-    "name": "Boucles d'oreilles tissé",
+    "name": "Boucles d'oreilles tissées",
     "price": 15.00,
     "base": ["or", "argent"],
     "image": "images/bijoux/botisse_roj.avif"
