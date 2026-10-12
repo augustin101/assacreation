@@ -4,28 +4,28 @@
     "name": "Boucle d'oreille torsadé",
     "price": 10.00,
     "base": ["doré"],
-    "image": "images/bijoux/boakan_ov.avif"
+    "image": "images/bijoux/boshell_or.avif"
   },
   {
     "id": "botors_spirale",
     "name": "Boucle d'oreille torsadé",
     "price": 10.00,
     "base": ["argenté"],
-    "image": "images/bijoux/boakan_ov.avif"
+    "image": "images/bijoux/bospir_ar.avif"
   },
    {
     "id": "botors_labyrinth",
     "name": "Boucle d'oreille torsadé",
     "price": 10.00,
     "base": ["argenté","doré"],
-    "image": "images/bijoux/boakan_ov.avif"
+    "image": ["images/bijoux/bolabyr_or.avif","images/bijoux/bolabyr_ar.avif"]
   },
   {
     "id": "botors_petite",
     "name": "Boucle d'oreille torsadé",
     "price": 5.00,
     "base": ["argenté"],
-    "image": "images/bijoux/boakan_ov.avif"
+    "image": "images/bijoux/bomini_ar.avif"
   },
     {
     "id": "boakan_ov",
